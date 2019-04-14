@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const todoRouter = require('./routers/todo');
 const lineRouter = require('./routers/line');
 const bodyParser = require('body-parser');
 
