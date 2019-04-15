@@ -3,8 +3,7 @@ const request = require('request');
 module.exports = {
   // オウム返し
   returnMessage: (req, res) => {
-    const CH_SECRET = 'xxxxxxxx';     //Channel Secretを指定
-    const CH_ACCESS_TOKEN = 'xxxxxx'; //Channel Access Tokenを指定
+    const CH_ACCESS_TOKEN = '622ea6a8001a2653aaf89035c277e1c9'; //Channel Access Tokenを指定
 
     // Lineプラットフォームから送信されてきたイベントを取得
     let WebhookEventObject = JSON.parse(req.body).events[0];
