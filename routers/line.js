@@ -3,6 +3,7 @@ const router = express.Router();
 const controller = require('../controllers/line');
 
 // LINE Bot TEST
-router.route('/').post(controller.returnMessage);
+router.post("/", controller.returnMessage);
+// router.route('/').post(controller.returnMessage);
 
 module.exports = router;

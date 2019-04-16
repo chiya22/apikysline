@@ -10,11 +10,11 @@
   "author": "Tomoya Yoshida",
   "license": "ISC",
   "devDependencies": {
-    "mocha": "^6.0.2",
     "power-assert": "^1.6.1",
     "supertest": "^4.0.2"
   },
   "dependencies": {
+    "@line/bot-sdk": "^6.6.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "request": "^2.88.0"

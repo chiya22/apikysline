@@ -1,47 +1,19 @@
 const request = require('request');
+const line = require("@line/bot-sdk");
+const config = require("../config/line.config");
 
 module.exports = {
-  // オウム返し
   returnMessage: (req, res) => {
-    const CH_ACCESS_TOKEN = ''; //Channel Access Tokenを指定
-    
-    // Lineプラットフォームから送信されてきたイベントを取得
-    let WebhookEventObject = JSON.parse(req.body).events[0];
-
-    if (WebhookEventObject.type !== 'message') {
-      return;
-    }
-    if (WebhookEventObject.message.type !== 'text') {
-      return;
-    }
-
-    var headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer {' + CH_ACCESS_TOKEN + '}',
-    };
-
-    var data = {
-      'replyToken': WebhookEventObject.replyToken,
-      "messages": [{
-        type: 'text',
-        text: WebhookEventObject.message.text
-      }]
-    };
-
-    var options = {
-      url: 'https://api.line.me/v2/bot/message/reply',
-      // proxy: process.env.FIXIE_URL, Proxyサーバの設定はいるの？
-      headers: headers,
-      json: true,
-      body: data
-    };
-
-    request.post(options, (error, response, body) => {
-      if (!error && response.statusCode == 200) {
-        console.log(body); // POST後にbodyには何が設定されるのか？
-      } else {
-        console.log('error: ' + JSON.stringify(response));
+    // bodyのparseと署名のcheck
+    line.middleware(config);
+    res.status(200).end();
+    const events = req.body.events;
+    const client = new line.Client(config);
+    for (let i = 0; i < events.length; i++) {
+      const event = events[i];
+      if (event.type === "message" && event.message.type === "text") {
+        client.replyMessage(event.replyToken, event.message.text + "って言いましたね");
       }
-    });
+    }
   }
 };
