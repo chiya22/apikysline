@@ -1,6 +1,6 @@
 const PORT = 8000;
-const app = require('./app');
+const app = require("./app");
 
 app.listen(PORT, () => {
-  console.log(`sample server started :  ${PORT}`)
+  console.log(`bot server started :  ${PORT}`)
 });

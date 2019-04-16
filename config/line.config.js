@@ -1,5 +1,5 @@
 module.exports = {
-  channelAccessToken: "",
-  channelSecret: ""
+  channelAccessToken: process.env.ACCESS_TOKEN,
+  channelSecret: process.env.SECRET_KEY
 }
 

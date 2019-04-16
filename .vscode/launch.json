@@ -9,7 +9,11 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceFolder}\\index.js"
+      "program": "${workspaceFolder}\\index.js",
+      "env":{
+        "ACCESS_TOKEN":"jhtPiYFyWApCbPVga4+9aJ64YCjwVPE1yq5cxRR9eZwiznn7hIVHhCaIBcw8jxSqZThpK7T8S1JxPRYN7WtdYKj6wjeZ2mmrcizIB8lxxJ98tJOfscdL+6ozXK0cfgBAqCWHOCxyFpvRlHxdGUW8DgdB04t89/1O/w1cDnyilFU=",
+        "SECRET_KEY":"622ea6a8001a2653aaf89035c277e1c9"
+      }
     },
     {
       "type": "node",
