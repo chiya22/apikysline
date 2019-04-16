@@ -1,4 +1,3 @@
-const request = require("request");
 const line = require("@line/bot-sdk");
 const config = require("../config/line.config");
 
