@@ -6,15 +6,16 @@
   "scripts": {
     "start": "node index.js"
   },
-  "repository" :
-  { "type" : "git"
-  , "url" : "https://github.com/chiya22/apikysline.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chiya22/apikysline.git"
   },
   "author": "Tomoya Yoshida",
   "license": "ISC",
   "devDependencies": {},
   "dependencies": {
     "@line/bot-sdk": "^6.6.0",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "pg": "^7.10.0"
   }
 }
