@@ -5,7 +5,6 @@ const config = require("../config/line.config");
 module.exports = {
   returnMessage: (req, res) => {
     // bodyのparseと署名のcheck
-    line.middleware(config);
     res.status(200).end();
     const events = req.body.events;
     const client = new line.Client(config);
