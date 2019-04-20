@@ -1,16 +1,10 @@
 const line = require("@line/bot-sdk");
-// const config = require("../config/line.config");
+const config = require("../config/line.config");
 // const db = require("../models/line");
-
-const config = {
-  channelAccessToken: process.env.ACCESS_TOKEN,
-  channelSecret: process.env.SECRET_KEY
-};
 
 module.exports = {
   returnMessage: (req, res) => {
 
-    line.middleware(config)
     const events = req.body.events;
     const client = new line.Client(config);
     for (let i = 0; i < events.length; i++) {
@@ -36,11 +30,10 @@ module.exports = {
       }
     }
     async function echoman(ev) {
-      // const pro =  await client.getProfile(ev.source.userId);
+      const pro =  await client.getProfile(ev.source.userId);
       return client.replyMessage(ev.replyToken, {
         type: "text",
-        text: `今「${ev.message.text}」って言いました？`
-        // text: `${pro.displayName}さん、今「${ev.message.text}」って言いました？`
+        text: `${pro.displayName}さん、今「${ev.message.text}」って言いました？`
       })
     }
     
