@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 // const controller = require("../controllers/line");
 const line = require("@line/bot-sdk");
-const config = require("../config/line.config");
+// const config = require("../config/line.config");
 
 const config = {
   channelAccessToken: process.env.ACCESS_TOKEN,
