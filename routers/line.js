@@ -12,7 +12,7 @@ const config = {
 router.post("/line/", line.middleware(config), (req, res) => lineBot(req, res)); // 変更、middlewareを追加
 
 function lineBot(req, res) {
-  res.json({ test: "hook" });
+  res.status(200).end();
   console.log("pass"); // 追加
 }
 
