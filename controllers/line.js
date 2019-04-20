@@ -15,9 +15,7 @@ module.exports = {
           userId: event.source.userId,
           messageId: event.message.id,
           message:event.message.text,
-          cretaed_timestamp: event.timestamp
         }
-        console.log(record);
         db.create(record, (err, data) => {
           if (err){
             console.log(err.message);
@@ -37,6 +35,3 @@ module.exports = {
     
   }
 };
-
-
-

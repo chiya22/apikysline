@@ -14,7 +14,7 @@ const findAll = ((callback) => {
   client.connect();
 
   let query = {};
-  query.text = "select * from line";
+  query.text = "select * from lines";
   query.values = [];
   //一覧の取得
   client.query(query, (err, result) => {
@@ -31,7 +31,7 @@ const findAllByKey = ((query_value, callback) => {
   client.connect();
 
   let query = {};
-  query.text = "select * from line where userId = $1 order by created_timestamp";
+  query.text = "select * from lines where userId = $1 order by created_timestamp";
   query.values = [query_value];
   //一覧の取得
   client.query(query, (err, result) => {
@@ -49,7 +49,7 @@ const find = ((messageId, callback) => {
   client.connect();
 
   let query = {};
-  query.text = "select * from line where messageId = $1";
+  query.text = "select * from lines where messageId = $1";
   query.values = [messageId];
   // 1件取得
   client.query(query, (err, result) => {
@@ -71,7 +71,7 @@ const create = ((line, callback) => {
   client.connect();
 
   let query = {};
-  query.text = "insert into line(replyToken, userId, messageId, message, created_timestamp) values ($1,$2,$3,$4,$5)";
+  query.text = "insert into lines(replyToken, userId, messageId, message, created_timestamp) values ($1,$2,$3,$4,$5)";
   query.values = [line.replyToken, line.userId, line.messageId, line.message, new Date()];
 
   // INSERT
