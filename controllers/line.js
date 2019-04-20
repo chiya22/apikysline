@@ -1,6 +1,11 @@
 const line = require("@line/bot-sdk");
-const config = require("../config/line.config");
+// const config = require("../config/line.config");
 // const db = require("../models/line");
+
+const config = {
+  channelAccessToken: process.env.ACCESS_TOKEN,
+  channelSecret: process.env.SECRET_KEY
+};
 
 module.exports = {
   returnMessage: (req, res) => {
@@ -27,7 +32,6 @@ module.exports = {
         const promises = [];
         promises.push(echoman(event))
         Promise.all(promises).then(console.log("pass")).catch(e => console.log(e));
-        console.log("pass");
       }
     }
     async function echoman(ev) {
