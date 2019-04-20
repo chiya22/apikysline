@@ -10,6 +10,7 @@ const config = {
 module.exports = {
   returnMessage: (req, res) => {
 
+    line.middleware(config)
     const events = req.body.events;
     const client = new line.Client(config);
     for (let i = 0; i < events.length; i++) {

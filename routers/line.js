@@ -10,7 +10,7 @@ const config = require("../config/line.config");
 // };
 
 // LINE Bot TEST
-router.post("/", line.middleware(config), (req,res) => controller.returnMessage(req,res));
+router.post("/", (req,res) => controller.returnMessage(req,res));
 // router.route('/').post(controller.returnMessage);
 
 module.exports = router;
