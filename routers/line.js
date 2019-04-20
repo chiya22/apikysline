@@ -9,7 +9,7 @@ const config = {
   channelSecret: process.env.SECRET_KEY
 };
 
-router.post("/line/", line.middleware(config), (req, res) => lineBot(req, res)); // 変更、middlewareを追加
+router.post("/", line.middleware(config), (req, res) => lineBot(req, res)); // 変更、middlewareを追加
 
 function lineBot(req, res) {
   res.status(200).end();
