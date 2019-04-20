@@ -27,7 +27,7 @@ module.exports = {
         // const promises = [];
         // promises.push(echoman(event))
         // Promise.all(promises).then(console.log("pass")).catch(e => console.log(e));
-        Promise.resoleve(echoman(event)).catch(e=>console.log(e)));
+        Promise.resolve(echoman(event)).catch(e=>console.log(e)));
       }
     }
     async function echoman(ev) {
