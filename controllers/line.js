@@ -28,15 +28,16 @@ module.exports = {
         Promise.all(echoman(event)).then(console.log("pass"));
       }
     }
+    async function echoman(ev) {
+      const pro =  await client.getProfile(ev.source.userId);
+      return client.replyMessage(ev.replyToken, {
+        type: "text",
+        text: `${pro.displayName}さん、今「${ev.message.text}」って言いました？`
+      })
+    }
+    
   }
 };
 
-async function echoman(ev) {
-  const pro =  await client.getProfile(ev.source.userId);
-  return client.replyMessage(ev.replyToken, {
-    type: "text",
-    text: `${pro.displayName}さん、今「${ev.message.text}」って言いました？`
-  })
-}
 
 
