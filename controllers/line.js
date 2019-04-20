@@ -17,7 +17,7 @@ module.exports = {
           message:event.message.text,
           cretaed_timestamp: event.timestamp
         }
-        consile.log(record);
+        console.log(record);
         db.create(record, (err, data) => {
           if (err){
             console.log(err.message);
