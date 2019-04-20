@@ -27,14 +27,15 @@ module.exports = {
         // })
         const promises = [];
         promises.push(echoman(event))
-        Promise.all(promises).then(console.log("pass"));
+        Promise.all(promises).then(console.log("pass")).catch(e => console.log(e));
       }
     }
     async function echoman(ev) {
-      const pro =  await client.getProfile(ev.source.userId);
+      // const pro =  await client.getProfile(ev.source.userId);
       return client.replyMessage(ev.replyToken, {
         type: "text",
-        text: `${pro.displayName}さん、今「${ev.message.text}」って言いました？`
+        text: `今「${ev.message.text}」って言いました？`
+        // text: `${pro.displayName}さん、今「${ev.message.text}」って言いました？`
       })
     }
     
