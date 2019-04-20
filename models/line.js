@@ -72,7 +72,7 @@ const create = ((line, callback) => {
 
   let query = {};
   query.text = "insert into line(replyToken, userId, messageId, message, created_timestamp) values ($1,$2,$3,$4,$5)";
-  query.values = [line[replyToken], line[userId], line[messageId], line[message], line[created_timestamp]];
+  query.values = [line.replyToken, line.userId, line.messageId, line.message, line.created_timestamp];
 
   // INSERT
   client.query(query, (err, result) => {
