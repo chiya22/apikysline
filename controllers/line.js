@@ -24,9 +24,10 @@ module.exports = {
         //     throw new Error(err);
         //   }
         // })
-        const promises = [];
-        promises.push(echoman(event))
-        Promise.all(promises).then(console.log("pass")).catch(e => console.log(e));
+        // const promises = [];
+        // promises.push(echoman(event))
+        // Promise.all(promises).then(console.log("pass")).catch(e => console.log(e));
+        Promise.resoleve(echoman(event()).catch(e=>console.log(e)));
       }
     }
     async function echoman(ev) {
