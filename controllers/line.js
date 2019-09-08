@@ -2,13 +2,15 @@ const line = require("@line/bot-sdk");
 const config = require("../config/line.config");
 const db = require("../models/line");
 
-
-client.pushMessage('yo4da10mo8', {
-  type: 'text',
-  text: 'hello, world',
-})
-
 module.exports = {
+  sendPushMessage: (mes) => {
+    const client = new line.Client(config);
+    client.pushMessage("yo4da10mo8",{
+      type: "text",
+      text: mes
+    });
+    console.log("sended push message");
+  },
   returnMessage: (req, res) => {
 
     const events = req.body.events;
