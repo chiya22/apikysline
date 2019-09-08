@@ -3,18 +3,18 @@ const config = require("../config/line.config");
 const db = require("../models/line");
 
 module.exports = {
-  // sendPushMessage: (mes) => {
-  //   const client = new line.Client(config);
-  //   client.pushMessage("yo4da10mo8",{
-  //     type: "text",
-  //     text: mes
-  //   }).then( () => {
-  //     console.log("sended push message");
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-  // },
+  sendPushMessage: (mes) => {
+    const client = new line.Client(config);
+    client.pushMessage("yo4da10mo8",{
+      type: "text",
+      text: mes
+    }).then( () => {
+      console.log("sended push message");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  },
   returnMessage: (req, res) => {
 
     const events = req.body.events;
