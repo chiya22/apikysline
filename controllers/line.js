@@ -8,8 +8,12 @@ module.exports = {
     client.pushMessage("yo4da10mo8",{
       type: "text",
       text: mes
+    }).then( () => {
+      console.log("sended push message");
+    })
+    .catch((err) => {
+      console.log(err);
     });
-    console.log("sended push message");
   },
   returnMessage: (req, res) => {
 
