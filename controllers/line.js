@@ -2,6 +2,12 @@ const line = require("@line/bot-sdk");
 const config = require("../config/line.config");
 const db = require("../models/line");
 
+
+client.pushMessage('yo4da10mo8', {
+  type: 'text',
+  text: 'hello, world',
+})
+
 module.exports = {
   returnMessage: (req, res) => {
 
