@@ -23,16 +23,7 @@ module.exports = {
           }
         })
         Promise.resolve(echoman(event)).catch(e=>console.log(e));
-
-        client.pushMessage("yo4da10mo8",{
-          type: "text",
-          text: "send message!!"
-        }).then( () => {
-          console.log("sended push message");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        Promise.resolve(sendMessage(event)).catch(e=>console.log(e));
       }
     }
     async function echoman(ev) {
@@ -40,6 +31,12 @@ module.exports = {
       return client.replyMessage(ev.replyToken, {
         type: "text",
         text: `${pro.displayName}さん、今「${ev.message.text}」って言いました？`
+      })
+    }
+    async function sendMessage(ev) {
+      return client.pushMessage(ev.source.userId, {
+        type: "test",
+        test: "receive message!!"
       })
     }
     
