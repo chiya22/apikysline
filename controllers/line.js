@@ -3,16 +3,16 @@ const config = require("../config/line.config");
 const db = require("../models/line");
 
 module.exports = {
-  // sendPushMessage: (mes) => {
-  //   const client = new line.Client(config);
-  //   Promise.resolve(sendMessage(mes)).catch(e=>console.log(e));
-  //   async function sendMessage(mes) {
-  //     return client.pushMessage("yo4da10mo8", {
-  //       type: "text",
-  //       text: mes
-  //     })
-  //   }
-  // },
+  sendPushMessage: (mes) => {
+    const client = new line.Client(config);
+    Promise.resolve(sendMessage(mes)).catch(e=>console.log(e));
+    async function sendMessage(mes) {
+      return client.pushMessage("Ub09377720f78d780eec5acac8eb075d4", {
+        type: "text",
+        text: mes
+      })
+    }
+  },
   returnMessage: (req, res) => {
 
     const events = req.body.events;
@@ -33,8 +33,8 @@ module.exports = {
         //   }
         // })
         Promise.resolve(echoman(event)).catch(e=>console.log(e));
-        console.log(event.source.userId)
-        Promise.resolve(sendMessage(event)).catch(e=>console.log(e));
+        // console.log(event.source.userId)
+        // Promise.resolve(sendMessage(event)).catch(e=>console.log(e));
       }
     }
     async function echoman(ev) {
@@ -44,11 +44,11 @@ module.exports = {
         text: `${pro.displayName}さん、今「${ev.message.text}」って言いました？`
       })
     }
-    async function sendMessage(ev) {
-      return client.pushMessage(ev.source.userId, {
-        type: "text",
-        text: "aaaaaaaaahhhhhhhhhh"
-      })
-    }
+    // async function sendMessage(ev) {
+    //   return client.pushMessage(ev.source.userId, {
+    //     type: "text",
+    //     text: "aaaaaaaaahhhhhhhhhh"
+    //   })
+    // }
   }
 };
