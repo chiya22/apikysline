@@ -33,7 +33,8 @@ module.exports = {
         //   }
         // })
         Promise.resolve(echoman(event)).catch(e=>console.log(e));
-        Promise.resolve(sendMessage("まずはこれ")).catch(e=>console.log(e));
+        console.log(event.source.userId)
+        Promise.resolve(sendMessage(event)).catch(e=>console.log(e));
       }
     }
     async function echoman(ev) {
@@ -43,10 +44,10 @@ module.exports = {
         text: `${pro.displayName}さん、今「${ev.message.text}」って言いました？`
       })
     }
-    async function sendMessage(mes) {
-      return client.pushMessage("yo4da10mo8", {
+    async function sendMessage(ev) {
+      return client.pushMessage(ev.source.userId, {
         type: "text",
-        text: mes
+        text: "aaaaaaaaahhhhhhhhhh"
       })
     }
   }
