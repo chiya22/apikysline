@@ -7,6 +7,6 @@ const config = require("../config/line.config");
 // LINE Bot TEST
 router.post("/", line.middleware(config), (req,res) => controller.returnMessage(req,res));
 
-controller.sendPushMessage("開始！！");
+controller.startCron();
 
 module.exports = router;
