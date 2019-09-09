@@ -3,19 +3,6 @@ const config = require("../config/line.config");
 const db = require("../models/line");
 
 module.exports = {
-  sendPushMessage: (mes) => {
-    console.log("send message start");
-    const client = new line.Client(config);
-    client.pushMessage("yo4da10mo8",{
-      type: "text",
-      text: mes
-    }).then( () => {
-      console.log("sended push message");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  },
   returnMessage: (req, res) => {
 
     const events = req.body.events;
@@ -36,6 +23,16 @@ module.exports = {
           }
         })
         Promise.resolve(echoman(event)).catch(e=>console.log(e));
+
+        client.pushMessage("yo4da10mo8",{
+          type: "text",
+          text: "send message!!"
+        }).then( () => {
+          console.log("sended push message");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       }
     }
     async function echoman(ev) {

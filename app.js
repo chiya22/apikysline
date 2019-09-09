@@ -9,10 +9,4 @@ const lineRouter = require("./routers/line");
 app.use("/", indexRouter);
 app.use("/line", lineRouter);
 
-const controller = require("./controllers/line")
-console.log("sssssstart");
-controller.sendPushMessage("このメッセージが送信されるはずですよね？");
-console.log("eeeeeeend");
-
-
 module.exports = app;
