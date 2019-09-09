@@ -4,7 +4,7 @@ const db = require("../models/line");
 
 module.exports = {
   sendPushMessage: (mes) => {
-    const client = new line.client(config);
+    const client = new line.Client(config);
     Promise.resolve(sendMessage(event)).catch(e=>console.log(e));
     async function sendMessage(mes) {
       return client.pushMessage("yo4da10mo8", {
