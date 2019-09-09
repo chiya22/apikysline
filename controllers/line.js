@@ -6,21 +6,6 @@ const cron = require("node-cron");
 module.exports = {
   startCron: () => {
     const client = new line.Client(config);
-    let date = new Date();
-    console.log(`new Date: ${date}`);
-    const lastDate = getLastDayOfMonth(date.getFullYear(),date.getMonth())
-    console.log(`date.getDate:${date.getDate()}`);
-    console.log(`lastDate:${lastDate}`);
-    if (lastDate == date.getDate()){
-      console.log("hit");
-    }
-    function getLastDayOfMonth(year, month) {
-      let date = new Date(year, month + 1, 0);
-      return date.getDate();
-    }
-  // cron.schedule('* * * * *', () => {
-    //   Promise.resolve(sendMessage("毎分実行")).catch(e=>console.log(e));
-    // });
     cron.schedule('0 0 12 * * 1-5', () => {
       Promise.resolve(sendMessage("お昼ですよ、メールしましょ")).catch(e=>console.log(e));
     });
@@ -31,7 +16,11 @@ module.exports = {
       Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e=>console.log(e));
     });
     cron.schedule('0 0 9 28-31 * 1-5', () => {
-      Promise.resolve(sendMessage("締資料作成しました？作成していないなら作成しましょ")).catch(e=>console.log(e));
+      const date = new Date();
+      const lastDate = getLastDayOfMonth(date.getFullYear(),date.getMonth())
+      if (lastDate == date.getDate()){
+        Promise.resolve(sendMessage("締資料作成しました？作成していないなら作成しましょ")).catch(e=>console.log(e));
+      }
     });
     async function sendMessage(mes) {
       return client.pushMessage("Ub09377720f78d780eec5acac8eb075d4", {
@@ -39,7 +28,11 @@ module.exports = {
         text: mes
       })
     }
-  },
+    function getLastDayOfMonth(year, month) {
+      let date = new Date(year, month + 1, 0);
+      return date.getDate();
+    }
+},
   returnMessage: (req, res) => {
 
     const events = req.body.events;
