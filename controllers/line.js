@@ -8,10 +8,10 @@ module.exports = {
     const client = new line.Client(config);
     let date = new Date();
     console.log(`new Date: ${date}`);
-    const lastDate = getLastDayOfMonth(date.getFullYear,date.getMonth)
-    console.log(`date.getDate:${date.getDate}`);
+    const lastDate = getLastDayOfMonth(date.getFullYear(),date.getMonth())
+    console.log(`date.getDate:${date.getDate()}`);
     console.log(`lastDate:${lastDate}`);
-    if (lastDate == date.getDate){
+    if (lastDate == date.getDate()){
       console.log("hit");
     }
     function getLastDayOfMonth(year, month) {
