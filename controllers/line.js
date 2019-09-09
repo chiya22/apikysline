@@ -6,18 +6,18 @@ const cron = require("node-cron");
 module.exports = {
   startCron: () => {
     const client = new line.Client(config);
-    cron.schedule('0 1 0 * * 1-5', () => {
+    cron.schedule('0 1 0 * * *', () => {
       Promise.resolve(sendMessage("毎分実行")).catch(e=>console.log(e));
     });
-    cron.schedule('0 0 12 * * 1-5', () => {
-      Promise.resolve(sendMessage("お昼ですよ")).catch(e=>console.log(e));
-    });
-    cron.schedule('0 0 13 * * 1-5', () => {
-      Promise.resolve(sendMessage("午後が始まりますよ")).catch(e=>console.log(e));
-    });
-    cron.schedule('0 0 16 * * 1-5', () => {
-      Promise.resolve(sendMessage("夕ご飯どうしますか？")).catch(e=>console.log(e));
-    });
+    // cron.schedule('0 0 12 * * 1-5', () => {
+    //   Promise.resolve(sendMessage("お昼ですよ")).catch(e=>console.log(e));
+    // });
+    // cron.schedule('0 0 13 * * 1-5', () => {
+    //   Promise.resolve(sendMessage("午後が始まりますよ")).catch(e=>console.log(e));
+    // });
+    // cron.schedule('0 0 16 * * 1-5', () => {
+    //   Promise.resolve(sendMessage("夕ご飯どうしますか？")).catch(e=>console.log(e));
+    // });
     async function sendMessage(mes) {
       return client.pushMessage("Ub09377720f78d780eec5acac8eb075d4", {
         type: "text",
