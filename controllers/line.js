@@ -3,16 +3,16 @@ const config = require("../config/line.config");
 const db = require("../models/line");
 
 module.exports = {
-  sendPushMessage: (mes) => {
-    const client = new line.Client(config);
-    Promise.resolve(sendMessage(mes)).catch(e=>console.log(e));
-    async function sendMessage(mes) {
-      return client.pushMessage("yo4da10mo8", {
-        type: "text",
-        text: mes
-      })
-    }
-  },
+  // sendPushMessage: (mes) => {
+  //   const client = new line.Client(config);
+  //   Promise.resolve(sendMessage(mes)).catch(e=>console.log(e));
+  //   async function sendMessage(mes) {
+  //     return client.pushMessage("yo4da10mo8", {
+  //       type: "text",
+  //       text: mes
+  //     })
+  //   }
+  // },
   returnMessage: (req, res) => {
 
     const events = req.body.events;
@@ -33,6 +33,7 @@ module.exports = {
         //   }
         // })
         Promise.resolve(echoman(event)).catch(e=>console.log(e));
+        Promise.resolve(sendMessage("まずはこれ")).catch(e=>console.log(e));
       }
     }
     async function echoman(ev) {
@@ -40,6 +41,12 @@ module.exports = {
       return client.replyMessage(ev.replyToken, {
         type: "text",
         text: `${pro.displayName}さん、今「${ev.message.text}」って言いました？`
+      })
+    }
+    async function sendMessage(mes) {
+      return client.pushMessage("yo4da10mo8", {
+        type: "text",
+        text: mes
       })
     }
   }
