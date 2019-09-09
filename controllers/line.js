@@ -35,7 +35,7 @@ module.exports = {
     }
     async function sendMessage(ev) {
       return client.pushMessage(ev.source.userId, {
-        type: "test",
+        type: "text",
         test: "receive message!!"
       })
     }
