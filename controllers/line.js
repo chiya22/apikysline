@@ -6,7 +6,7 @@ const cron = require("node-cron");
 module.exports = {
   startCron: () => {
     const client = new line.Client(config);
-    cron.schedule('0 1 0 * * *', () => {
+    cron.schedule('* * * * *', () => {
       Promise.resolve(sendMessage("毎分実行")).catch(e=>console.log(e));
     });
     // cron.schedule('0 0 12 * * 1-5', () => {
