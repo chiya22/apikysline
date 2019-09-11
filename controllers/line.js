@@ -52,6 +52,30 @@ module.exports = {
         //     throw new Error(err);
         //   }
         // })
+        if (event.message.text === "bot帰れ") {
+          client.leaveGroup(event.source.groupId)
+          .then(() => {
+              client.replyMessage(event.replyToken, {
+                type: "text",
+                text: `${event.source.groupId}から退室します。。。`
+              });
+          })
+          .catch((err) => {
+            console.log(err.message);
+            throw new Error(err);
+          });
+          client.leaveRoom(event.source.roomId)
+          .then(() => {
+            client.replyMessage(event.replyToken, {
+              type: "text",
+              text: `${event.source.roomId}から退室します。。。`
+            })
+            .catch((err) => {
+              console.log(err.message);
+              throw new Error(err);
+            });
+          });
+        }
         Promise.resolve(echoman(event)).catch(e=>console.log(e));
       }
     }
