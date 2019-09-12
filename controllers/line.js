@@ -1,6 +1,6 @@
 const line = require("@line/bot-sdk");
 const config = require("../config/line.config");
-const db = require("../models/line");
+const db = require("../models/events");
 const cron = require("node-cron");
 
 module.exports = {
@@ -40,27 +40,34 @@ module.exports = {
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
       if (event.type === "message" && event.message.type === "text") {
-
-        Promise.resolve(echoman(event)).catch(e => console.log(e));
-
-        // const record = {
-        //   replyToken: event.replyToken,
-        //   userId: event.source.userId,
-        //   messageId: event.message.id,
-        //   message:event.message.text,
-        // }
-        // db.create(record, (err, data) => {
-        //   if (err){
-        //     console.log(err.message);
-        //     throw new Error(err);
+        let recieveContent = event.message.text.split("\n");
+        for (item of recieveContent){
+          console.log(item);
+        }
+        // if (erecieveContent[0] === "追加"){
+        //   const record = {
+        //     eventid: event.replyToken,
+        //     eventcontent: event.source.userId
         //   }
-        // })
+        //   db.create(record, (err, data) => {
+        //     if (err){
+        //       console.log(err.message);
+        //       throw new Error(err);
+        //     }
+        //   })
+        // }
+        // if (event.message.text ==="照会"){
+        //   db.findAll((err,data) => {
+        //     if (err){
+        //       console.log(err.message);
+        //       throw new Error(err);
+        //     }else{
+
+        //     }
+        //   })
+        // }
         if (event.message.text === "bot帰れ") {
           if (event.source.type === "group") {
-            client.replyMessage(event.replyToken, {
-              type: "text",
-              text: `${event.source.groupId}から退室します。。。`
-            });
             client.leaveGroup(event.source.groupId)
               .then(() => {
               })
@@ -70,10 +77,6 @@ module.exports = {
               });
           }
           if (event.source.type === "room") {
-            client.replyMessage(event.replyToken, {
-              type: "text",
-              text: `${event.source.roomId}から退室します。。。`
-            });
             client.leaveRoom(event.source.roomId)
               .then(() => {
               })
@@ -82,6 +85,8 @@ module.exports = {
                 throw new Error(err);
               });
           };
+        } else {
+          Promise.resolve(echoman(event)).catch(e => console.log(e));
         }
       }
     }
