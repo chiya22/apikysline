@@ -1,9 +1,9 @@
 const config = require("../config/dbconfig.js");
 const { Client } = require("pg");
 
-// apikysline::DATABASE=> create table events(
-//   apikysline::DATABASE(> eventId varchar(12) primary key,
-//   apikysline::DATABASE(> eventContent varchar(100) not null,
+// apikysline::DATABASE=> create table schedules(
+//   apikysline::DATABASE(> scheduleId varchar(12) primary key,
+//   apikysline::DATABASE(> scheduleContent varchar(100) not null,
 //   apikysline::DATABASE(> created_timestamp timestamp);
 
 // ■ findAll
@@ -12,7 +12,7 @@ const findAll = ((callback) => {
   client.connect();
 
   let query = {};
-  query.text = "select * from events order by created_timestamp";
+  query.text = "select * from schedules order by created_timestamp";
   query.values = [];
   //一覧の取得
   client.query(query, (err, result) => {
@@ -24,14 +24,14 @@ const findAll = ((callback) => {
 });
 
 // ■ find
-const find = ((eventId, callback) => {
+const find = ((scheduleId, callback) => {
   // connect
   const client = new Client(config);
   client.connect();
 
   let query = {};
-  query.text = "select * from events where eventId = $1";
-  query.values = [eventId];
+  query.text = "select * from schedules where scheduleId = $1";
+  query.values = [scheduleId];
   // 1件取得
   client.query(query, (err, result) => {
     if (err) {
@@ -46,14 +46,14 @@ const find = ((eventId, callback) => {
 });
 
 // ■ create
-const create = ((event, callback) => {
+const create = ((schedule, callback) => {
   // connect
   const client = new Client(config);
   client.connect();
 
   let query = {};
-  query.text = "insert into events(eventId, eventContent, created_timestamp) values ($1,$2,$3)";
-  query.values = [event.eventId, event.eventContent, new Date()];
+  query.text = "insert into schedules(scheduleId, scheduleContent, created_timestamp) values ($1,$2,$3)";
+  query.values = [schedule.scheduleId, schedule.scheduleContent, new Date()];
 
   // INSERT
   client.query(query, (err, result) => {
