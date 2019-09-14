@@ -61,6 +61,7 @@ module.exports = {
               console.log(err.message);
               throw new Error(err);
             } else {
+              console.log(data);
               Promise.resolve(returnMessage(event,`登録しました。\n${data.rows[0].scheduleId}\n${data.rows[0].scheduleContent}`)).catch(e => console.log(e));
             }
           })
