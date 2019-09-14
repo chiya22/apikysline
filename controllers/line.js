@@ -53,8 +53,9 @@ module.exports = {
               console.log(err.message);
               throw new Error(err);
             } else {
-              console.log(data.rowCount);
-              Promise.resolve(returnSchedules(event, data.rows[0])).catch(e => console.log(e));
+              for (let j=0; j < data.rowCount; j++){
+                Promise.resolve(returnSchedules(event, data.rows[j])).catch(e => console.log(e));
+              }
             }
           })
         }
@@ -112,7 +113,7 @@ module.exports = {
       console.log(schedule);
       return client.replyMessage(ev.replyToken, {
         type: "text",
-        text: `日時：${schedule.scheduleid}\nコンテンツ：${schedule.schedulecontent}\n登録者：${schedule.created_username}`
+        text: `日時：${schedule.schedule_id}\nコンテンツ：${schedule.schedule_content}\n登録者：${schedule.created_username}`
       })
     }
   }
