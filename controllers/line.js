@@ -49,7 +49,7 @@ module.exports = {
           const record = {
             schedule_id: recieveContentList[1],
             schedule_content: recieveContentList[2],
-            created_username: pro
+            created_username: pro.displayName
           }
           db.create(record, (err,data) => {
             if (err) {
