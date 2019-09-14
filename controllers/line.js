@@ -38,6 +38,9 @@ module.exports = {
   },
   returnMessage: (req, res) => {
 
+    //　最初にstatusを正常に設定しておく
+    res.status(200).end();
+
     const events = req.body.events;
     const client = new line.Client(config);
     for (let i = 0; i < events.length; i++) {
@@ -69,8 +72,8 @@ module.exports = {
                 throw new Error(err);
               });
           };
-          // } else {
-          //   Promise.resolve(echoman(event)).catch(e => console.log(e));
+        } else {
+          Promise.resolve(returnHelp(event)).catch(e => console.log(e));
         }
       }
     }
@@ -107,7 +110,7 @@ module.exports = {
           throw new Error(err);
         } else {
           let returnMessage = `全部で${data.rowCount}件登録されています。\n-----\n`;
-          for (i = 0; i < data.rowCount; i++) { 
+          for (i = 0; i < data.rowCount; i++) {
             returnMessage += `日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[i].schedule_content}\n登録者：${data.rows[i].created_username}\n-----\n`;
           }
           return client.replyMessage(ev.replyToken, {
@@ -116,7 +119,12 @@ module.exports = {
           })
         }
       })
-    res.status(200).end();
+    }
+    async function returnHelp(ev) {
+      return client.replyMessage(ev.replyToken, {
+        type: "text",
+        text: "コマンドが誤っています。\n以下のリファレンスに従ってコマンドを送信してください。\n1行目：照会/追加/更新/削除\n2行目：日時をyyyyMMddHHmm形式で記入\n3行目：スケジュールの内容を記載"
+      });
     }
   }
 };
