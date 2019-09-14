@@ -47,8 +47,8 @@ module.exports = {
         if (recieveContentList[0] === "追加") {
           const pro = client.getProfile(event.source.userId);
           const record = {
-            scheduleId: recieveContentList[1],
-            scheduleContent: recieveContentList[2],
+            schedule_id: recieveContentList[1],
+            schedule_content: recieveContentList[2],
             created_username: pro
           }
           db.create(record, (err,data) => {
