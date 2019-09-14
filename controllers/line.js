@@ -116,7 +116,7 @@ module.exports = {
       console.log(schedule);
       return client.replyMessage(ev.replyToken, {
         type: "text",
-        text: `日時：${schedule.scheduleId}\nコンテンツ：${schedule.scheduleContent}`
+        text: `日時：${schedule.scheduleid}\nコンテンツ：${schedule.schedulecontent}`
       })
     }
   }
