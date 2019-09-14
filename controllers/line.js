@@ -6,9 +6,6 @@ const cron = require("node-cron");
 module.exports = {
   startCron: () => {
     const client = new line.Client(config);
-    cron.schedule('*/25 * * * *', () => {
-      console.log(new Date());
-    });
     cron.schedule('0 0 12 * * 1-5', () => {
       Promise.resolve(sendMessage("お昼ですよ、メールしましょ")).catch(e => console.log(e));
     });
@@ -77,13 +74,6 @@ module.exports = {
         }
       }
     }
-    // async function echoman(ev) {
-    //   const pro = await client.getProfile(ev.source.userId);
-    //   return client.replyMessage(ev.replyToken, {
-    //     type: "text",
-    //     text: `${pro.displayName}さん、今「${ev.message.text}」って言いました？`
-    //   })
-    // }
     async function createSchedule(ev, shcedule_id, schedule_content) {
       const pro = await client.getProfile(ev.source.userId);
       const record = {
