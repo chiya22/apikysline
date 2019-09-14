@@ -45,7 +45,7 @@ module.exports = {
       if (event.type === "message" && event.message.type === "text") {
         let recieveContentList = event.message.text.split("\n");
         if (recieveContentList[0] === "追加") {
-          const pro = await client.getProfile(event.source.userId);
+          const pro = client.getProfile(event.source.userId);
           const record = {
             scheduleId: recieveContentList[1],
             scheduleContent: recieveContentList[2],
