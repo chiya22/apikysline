@@ -4,7 +4,7 @@ const router = express.Router();
 // LINE Bot TEST
 router.get("/", (req,res) => {
   res.status(200).end;
-  res.json({result:"OK"});
+  res.send("apikysline");
 });
 
 module.exports = router;
