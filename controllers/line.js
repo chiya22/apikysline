@@ -61,9 +61,7 @@ module.exports = {
               console.log(err.message);
               throw new Error(err);
             } else {
-              console.log("登録 debug01")
-              Promise.resolve(returnMessage(event,`登録しました。\n${data[0].scheduleId}\n${data[0].scheduleContent}`)).catch(e => console.log(e));
-              console.log("登録 debug02")
+              Promise.resolve(returnMessage(event,`登録しました。\n${data.rows[0].scheduleId}\n${data.rows[0].scheduleContent}`)).catch(e => console.log(e));
             }
           })
         }
@@ -75,7 +73,9 @@ module.exports = {
             } else {
               console.log("照会 debug01")
               console.log(data)
-              Promise.resolve(returnSchedules(event, data[0].scheduleContent)).catch(e => console.log(e));
+              for (i=0 ;data.rowCount; i++){
+                Promise.resolve(returnSchedules(event, data.rows[i])).catch(e => console.log(e));
+              }
               console.log("照会 debug02")
             }
           })
