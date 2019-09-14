@@ -100,22 +100,21 @@ module.exports = {
         }
       })
     }
-    function returnSchedules(ev) {
+    async function returnSchedules(ev) {
       db.findAll((err, data) => {
         if (err) {
           console.log(err.message);
           throw new Error(err);
         } else {
-          returnSchedules(data);
+          let returnMessage;
+          for (i = 0; i < data.rowCount; i++) {
+            returnMessage = returnMessage & `日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[j].schedule_content}\n登録者：${data.rows[j].created_username}\n-----`;
+          }
+          return client.replyMessage(ev.replyToken, {
+            type: "text",
+            text: returnMessage
+          })
         }
-      })
-      let returnMessage;
-      for (i = 0; i < data.rowCount; i++) {
-        returnMessage = returnMessage & `日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[j].schedule_content}\n登録者：${data.rows[j].created_username}\n-----`;
-      }
-      return client.replyMessage(ev.replyToken, {
-        type: "text",
-        text: returnMessage
       })
     }
   }
