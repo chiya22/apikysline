@@ -109,7 +109,7 @@ module.exports = {
           let returnMessage;
           for (i = 0; i < data.rowCount; i++) {
             console.log(data.rows[i]);
-            returnMessage = returnMessage & `日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[i].schedule_content}\n登録者：${data.rows[i].created_username}\n-----`;
+            returnMessage = returnMessage + `日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[i].schedule_content}\n登録者：${data.rows[i].created_username}\n-----`;
           }
           return client.replyMessage(ev.replyToken, {
             type: "text",
