@@ -107,7 +107,7 @@ module.exports = {
         }
       })
     }
-    function returnSchedules(ev, schedule) {
+    function returnSchedules(ev, data) {
       let returnMessage;
       for (i = 0; i < data.rowCount; i++) {
         returnMessage = returnMessage & `日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[j].schedule_content}\n登録者：${data.rows[j].created_username}\n-----`;
