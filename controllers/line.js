@@ -106,10 +106,9 @@ module.exports = {
           console.log(err.message);
           throw new Error(err);
         } else {
-          let returnMessage;
+          let returnMessage = `全部で${data.rowCount}件登録されています。`;
           for (i = 0; i < data.rowCount; i++) {
-            console.log(data.rows[i]);
-            returnMessage = returnMessage + `日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[i].schedule_content}\n登録者：${data.rows[i].created_username}\n-----`;
+            returnMessage += `日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[i].schedule_content}\n登録者：${data.rows[i].created_username}\n-----`;
           }
           return client.replyMessage(ev.replyToken, {
             type: "text",
