@@ -19,6 +19,7 @@ const findAll = ((callback) => {
     if (err) {
       callback(err, null);
     }
+    console.log(result);
     callback(null, result);
   });
 });
@@ -64,6 +65,7 @@ const create = ((schedule, callback) => {
       .catch((err) => {
         throw err;
       });
+    console.log(result);
     callback(null, result.rows[0]);
   });
 });
