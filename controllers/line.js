@@ -108,7 +108,7 @@ module.exports = {
         } else {
           let returnMessage;
           for (i = 0; i < data.rowCount; i++) {
-            returnMessage = returnMessage & `日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[j].schedule_content}\n登録者：${data.rows[j].created_username}\n-----`;
+            returnMessage = returnMessage & `日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[i].schedule_content}\n登録者：${data.rows[i].created_username}\n-----`;
           }
           return client.replyMessage(ev.replyToken, {
             type: "text",
