@@ -53,7 +53,7 @@ module.exports = {
               console.log(err.message);
               throw new Error(err);
             } else {
-              cosole.log(data.rowCount);
+              console.log(data.rowCount);
               Promise.resolve(returnSchedules(event, data.rows[0])).catch(e => console.log(e));
             }
           })
