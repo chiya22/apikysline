@@ -13,7 +13,7 @@ const findAll = ((callback) => {
   client.connect();
 
   let query = {};
-  query.text = "select * from schedules order by created_timestamp";
+  query.text = "select * from schedules order by schedule_id";
   query.values = [];
   //一覧の取得
   client.query(query, (err, result) => {
