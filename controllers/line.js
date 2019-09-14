@@ -45,7 +45,7 @@ module.exports = {
       if (event.type === "message" && event.message.type === "text") {
         let recieveContentList = event.message.text.split("\n");
         if (recieveContentList[0] === "追加") {
-            Promise.resolve(createSchedule(event,recieveContentList[1],recieveContentList[2])).catch(e => console.log(e));
+          Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
         }
         if (recieveContentList[0] === "照会") {
           db.findAll((err, data) => {
@@ -53,9 +53,7 @@ module.exports = {
               console.log(err.message);
               throw new Error(err);
             } else {
-              for (let j=0; j < data.rowCount; j++){
-                Promise.resolve(returnSchedules(event, data.rows[j])).catch(e => console.log(e));
-              }
+              returnSchedules(data);
             }
           })
         }
@@ -109,11 +107,14 @@ module.exports = {
         }
       })
     }
-    async function returnSchedules(ev, schedule) {
-      console.log(schedule);
+    function returnSchedules(ev, schedule) {
+      let returnMessage;
+      for (i = 0; i < data.rowCount; i++) {
+        returnMessage = returnMessage & `日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[j].schedule_content}\n登録者：${data.rows[j].created_username}\n-----`;
+      }
       return client.replyMessage(ev.replyToken, {
         type: "text",
-        text: `日時：${schedule.schedule_id}\nコンテンツ：${schedule.schedule_content}\n登録者：${schedule.created_username}`
+        text: returnMessage
       })
     }
   }
