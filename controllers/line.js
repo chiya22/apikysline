@@ -51,10 +51,10 @@ module.exports = {
           console.log(`日時：${recieveContentList[1]}`);
           console.log(`コンテンツ：${recieveContentList[2]}`);
         }
-        if (recieveContent[0] === "追加") {
+        if (recieveContentList[0] === "追加") {
           const record = {
-            scheduleId: recieveContent[1],
-            scheduleContent: recieveContent[2]
+            scheduleId: recieveContentList[1],
+            scheduleContent: recieveContentList[2]
           }
           db.create(record, (err,data) => {
             if (err) {
@@ -65,7 +65,7 @@ module.exports = {
             }
           })
         }
-        if (recieveContent[0] === "照会") {
+        if (recieveContentList[0] === "照会") {
           db.findAll((err, data) => {
             if (err) {
               console.log(err.message);
@@ -94,8 +94,8 @@ module.exports = {
                 throw new Error(err);
               });
           };
-        } else {
-          Promise.resolve(echoman(event)).catch(e => console.log(e));
+        // } else {
+        //   Promise.resolve(echoman(event)).catch(e => console.log(e));
         }
       }
     }
