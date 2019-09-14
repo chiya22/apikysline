@@ -44,17 +44,12 @@ module.exports = {
       const event = events[i];
       if (event.type === "message" && event.message.type === "text") {
         let recieveContentList = event.message.text.split("\n");
-        for (recieveContent of recieveContentList) {
-          console.log(recieveContent);
-        }
         if (recieveContentList[0] === "追加") {
-          console.log(`日時：${recieveContentList[1]}`);
-          console.log(`コンテンツ：${recieveContentList[2]}`);
-        }
-        if (recieveContentList[0] === "追加") {
+          const pro = await client.getProfile(event.source.userId);
           const record = {
             scheduleId: recieveContentList[1],
-            scheduleContent: recieveContentList[2]
+            scheduleContent: recieveContentList[2],
+            created_username: pro
           }
           db.create(record, (err,data) => {
             if (err) {
@@ -99,13 +94,13 @@ module.exports = {
         }
       }
     }
-    async function echoman(ev) {
-      const pro = await client.getProfile(ev.source.userId);
-      return client.replyMessage(ev.replyToken, {
-        type: "text",
-        text: `${pro.displayName}さん、今「${ev.message.text}」って言いました？`
-      })
-    }
+    // async function echoman(ev) {
+    //   const pro = await client.getProfile(ev.source.userId);
+    //   return client.replyMessage(ev.replyToken, {
+    //     type: "text",
+    //     text: `${pro.displayName}さん、今「${ev.message.text}」って言いました？`
+    //   })
+    // }
     async function returnMessage(ev, mes) {
       return client.replyMessage(ev.replyToken, {
         type: "text",
@@ -116,7 +111,7 @@ module.exports = {
       console.log(schedule);
       return client.replyMessage(ev.replyToken, {
         type: "text",
-        text: `日時：${schedule.scheduleid}\nコンテンツ：${schedule.schedulecontent}`
+        text: `日時：${schedule.scheduleid}\nコンテンツ：${schedule.schedulecontent}\n登録者：${schedule.created_username}`
       })
     }
   }

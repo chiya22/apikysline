@@ -2,8 +2,9 @@ const config = require("../config/dbconfig.js");
 const { Client } = require("pg");
 
 // apikysline::DATABASE=> create table schedules(
-//   apikysline::DATABASE(> scheduleId varchar(12) primary key,
-//   apikysline::DATABASE(> scheduleContent varchar(100) not null,
+//   apikysline::DATABASE(> schedule_id varchar(12) primary key,
+//   apikysline::DATABASE(> schedule_content varchar(100) not null,
+//   apikysline::DATABASE(> created_username varchar(100),
 //   apikysline::DATABASE(> created_timestamp timestamp);
 
 // ■ findAll
@@ -19,20 +20,19 @@ const findAll = ((callback) => {
     if (err) {
       callback(err, null);
     }
-    console.log(result);
     callback(null, result);
   });
 });
 
 // ■ find
-const find = ((scheduleId, callback) => {
+const find = ((schedule_id, callback) => {
   // connect
   const client = new Client(config);
   client.connect();
 
   let query = {};
-  query.text = "select * from schedules where scheduleId = $1";
-  query.values = [scheduleId];
+  query.text = "select * from schedules where schedule_id = $1";
+  query.values = [schedule_id];
   // 1件取得
   client.query(query, (err, result) => {
     if (err) {
@@ -53,8 +53,8 @@ const create = ((schedule, callback) => {
   client.connect();
 
   let query = {};
-  query.text = "insert into schedules(scheduleId, scheduleContent, created_timestamp) values ($1,$2,$3)";
-  query.values = [schedule.scheduleId, schedule.scheduleContent, new Date()];
+  query.text = "insert into schedules(schedule_id, schedule_content, created_username, created_timestamp) values ($1,$2,$3,$4)";
+  query.values = [schedule.schedule_id, schedule.schedule_content, schedule.created_username, new Date()];
 
   // INSERT
   client.query(query, (err, result) => {
@@ -65,7 +65,6 @@ const create = ((schedule, callback) => {
       .catch((err) => {
         throw err;
       });
-    console.log(result);
     callback(null, result.rows[0]);
   });
 });
