@@ -61,7 +61,7 @@ module.exports = {
               console.log(err.message);
               throw new Error(err);
             } else {
-              // Promise.resolve(returnMessage(event,`登録しました。\n${data.rows[0].scheduleId}\n${data.rows[0].scheduleContent}`)).catch(e => console.log(e));
+              Promise.resolve(returnMessage(event,`登録しました。\n${recieveContentList[1]}\n${recieveContentList[2]}`)).catch(e => console.log(e));
             }
           })
         }
@@ -113,6 +113,7 @@ module.exports = {
       })
     }
     async function returnSchedules(ev, schedule) {
+      console.log(schedule);
       return client.replyMessage(ev.replyToken, {
         type: "text",
         text: `日時：${schedule.scheduleId}\nコンテンツ：${schedule.scheduleContent}`
