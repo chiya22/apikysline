@@ -72,10 +72,7 @@ module.exports = {
               throw new Error(err);
             } else {
               console.log("照会 debug01")
-              console.log(data)
-              for (i=0 ;data.rowCount; i++){
-                Promise.resolve(returnSchedules(event, data.rows[i])).catch(e => console.log(e));
-              }
+              Promise.resolve(returnSchedules(event, data.rows[0])).catch(e => console.log(e));
               console.log("照会 debug02")
             }
           })
