@@ -48,14 +48,7 @@ module.exports = {
           Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
         }
         if (recieveContentList[0] === "照会") {
-          db.findAll((err, data) => {
-            if (err) {
-              console.log(err.message);
-              throw new Error(err);
-            } else {
-              returnSchedules(data);
-            }
-          })
+          Promise.resolve(returnMessage(event)).catch(e => console.log(e));
         }
         if (event.message.text === "bot帰れ") {
           if (event.source.type === "group") {
@@ -107,9 +100,16 @@ module.exports = {
         }
       })
     }
-    function returnSchedules(ev, data) {
+    function returnSchedules(ev) {
+      db.findAll((err, data) => {
+        if (err) {
+          console.log(err.message);
+          throw new Error(err);
+        } else {
+          returnSchedules(data);
+        }
+      })
       let returnMessage;
-      console.log(data.rowCount);
       for (i = 0; i < data.rowCount; i++) {
         returnMessage = returnMessage & `日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[j].schedule_content}\n登録者：${data.rows[j].created_username}\n-----`;
       }
