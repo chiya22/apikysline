@@ -45,20 +45,7 @@ module.exports = {
       if (event.type === "message" && event.message.type === "text") {
         let recieveContentList = event.message.text.split("\n");
         if (recieveContentList[0] === "追加") {
-          const pro = client.getProfile(event.source.userId);
-          const record = {
-            schedule_id: recieveContentList[1],
-            schedule_content: recieveContentList[2],
-            created_username: pro.displayName
-          }
-          db.create(record, (err,data) => {
-            if (err) {
-              console.log(err.message);
-              throw new Error(err);
-            } else {
-              Promise.resolve(returnMessage(event,`登録しました。\n${recieveContentList[1]}\n${recieveContentList[2]}`)).catch(e => console.log(e));
-            }
-          })
+            Promise.resolve(createSchedule(event,recieveContentList[1],recieveContentList[2])).catch(e => console.log(e));
         }
         if (recieveContentList[0] === "照会") {
           db.findAll((err, data) => {
@@ -66,6 +53,7 @@ module.exports = {
               console.log(err.message);
               throw new Error(err);
             } else {
+              cosole.log(data.rowCount);
               Promise.resolve(returnSchedules(event, data.rows[0])).catch(e => console.log(e));
             }
           })
@@ -89,8 +77,8 @@ module.exports = {
                 throw new Error(err);
               });
           };
-        // } else {
-        //   Promise.resolve(echoman(event)).catch(e => console.log(e));
+          // } else {
+          //   Promise.resolve(echoman(event)).catch(e => console.log(e));
         }
       }
     }
@@ -101,10 +89,23 @@ module.exports = {
     //     text: `${pro.displayName}さん、今「${ev.message.text}」って言いました？`
     //   })
     // }
-    async function returnMessage(ev, mes) {
-      return client.replyMessage(ev.replyToken, {
-        type: "text",
-        text: mes
+    async function createSchedule(ev, shcedule_id, schedule_content) {
+      const pro = await client.getProfile(ev.source.userId);
+      const record = {
+        schedule_id: shcedule_id,
+        schedule_content: schedule_content,
+        created_username: pro.displayName
+      }
+      db.create(record, (err, data) => {
+        if (err) {
+          console.log(err.message);
+          throw new Error(err);
+        } else {
+          return client.replyMessage(ev.replyToken, {
+            type: "text",
+            text: "登録しました。"
+          })
+        }
       })
     }
     async function returnSchedules(ev, schedule) {
