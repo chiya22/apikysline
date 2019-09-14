@@ -48,7 +48,7 @@ module.exports = {
           Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
         }
         if (recieveContentList[0] === "照会") {
-          Promise.resolve(returnMessage(event)).catch(e => console.log(e));
+          Promise.resolve(returnSchedules(event)).catch(e => console.log(e));
         }
         if (event.message.text === "bot帰れ") {
           if (event.source.type === "group") {
