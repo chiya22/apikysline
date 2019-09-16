@@ -47,10 +47,10 @@ module.exports = {
         if (recieveContentList[0] === "追加") {
           Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
         }
-        if (recieveContentList[0] === "照会") {
+        else if (recieveContentList[0] === "照会") {
           Promise.resolve(returnSchedules(event)).catch(e => console.log(e));
         }
-        if (event.message.text === "bot帰れ") {
+        else if (event.message.text === "bot帰れ") {
           if (event.source.type === "group") {
             client.leaveGroup(event.source.groupId)
               .then(() => {
@@ -69,7 +69,8 @@ module.exports = {
                 throw new Error(err);
               });
           };
-        } else {
+        }
+        else {
           Promise.resolve(returnHelp(event)).catch(e => console.log(e));
         }
       }
