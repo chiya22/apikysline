@@ -69,8 +69,56 @@ const create = ((schedule, callback) => {
   });
 });
 
+// ■ update
+const update = ((schedule_id, schedule_content, callback) => {
+  // connect
+  const client = new Client(config);
+  client.connect();
+
+  let query = {};
+  query.text = "update schedules set schedule_content = $1 where schedule_id = $2";
+  query.values = [schedule_content, schedule_id];
+
+  // UPDATE
+  client.query(query, (err, result) => {
+    if (err) {
+      callback(err, null);
+    }
+    client.end()
+      .catch((err) => {
+        throw err;
+      });
+    callback(null, result.rows[0]);
+  });
+});
+
+// ■ remove
+const remove = ((schedule, callback) => {
+  // connect
+  const client = new Client(config);
+  client.connect();
+
+  let query = {};
+  query.text = "delete from schedules where schedule_id = $1";
+  query.values = [schedule.schedule_id];
+
+  // DELETE
+  client.query(query, (err, result) => {
+    if (err) {
+      callback(err, null);
+    }
+    client.end()
+      .catch((err) => {
+        throw err;
+      });
+    callback(null, result.rows[0]);
+  });
+});
+
 module.exports = {
   findAll: findAll,
   find: find,
-  create: create
+  create: create,
+  update: update,
+  delete: remove
 };
