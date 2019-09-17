@@ -45,15 +45,22 @@ module.exports = {
       if (event.type === "message" && event.message.type === "text") {
         let recieveContentList = event.message.text.split("\n");
         if (recieveContentList[0] === "追加") {
+          Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
 
-          validateInsert(recieveContentList, (err, data) => {
-            if (err) {
-              returnMessage(event,err.message);
-            } else {
-              Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
-            }
-          });
-      }
+          // validateInsert(recieveContentList, (err, data) => {
+          //   if (err) {
+          //     returnMessage(event,err.message);
+          //   } else {
+          //     Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
+          //   }
+          // });
+        }
+        else if (recieveContentList[0] === "削除") {
+          Promise.resolve(deleteSchedule(event,recieveContentList[1])).catch(e => console.log(e));
+        }
+        else if (recieveContentList[0] === "更新") {
+          Promise.resolve(updateSchedule(event,recieveContentList[1],recieveContentList[2])).catch(e => console.log(e));
+        }
         else if (recieveContentList[0] === "照会") {
           Promise.resolve(returnSchedules(event)).catch(e => console.log(e));
         }
@@ -78,16 +85,16 @@ module.exports = {
           };
         }
         else {
-          Promise.resolve(returnMessage(event,"コマンドが誤っています。\n以下のリファレンスに従ってコマンドを送信してください。\n1行目：照会/追加/更新/削除\n2行目：日時をyyyyMMddHHmm形式で記入\n3行目：スケジュールの内容を記載")).catch(e => console.log(e));
+          Promise.resolve(returnMessage(event, "コマンドが誤っています。\n以下のリファレンスに従ってコマンドを送信してください。\n1行目：照会/追加/更新/削除\n2行目：日時をyyyyMMddHHmm形式で記入\n3行目：スケジュールの内容を記載")).catch(e => console.log(e));
         }
       }
     }
-    function validateInsert(recieveContentList, callback) {
-      if (recieveContentList.length === 2){
-        err.message = "引数の数が違います";
-        callback(err,null);
-      }
-    }
+    // function validateInsert(recieveContentList, callback) {
+    //   if (recieveContentList.length === 2) {
+    //     err.message = "引数の数が違います";
+    //     callback(err, null);
+    //   }
+    // }
     async function createSchedule(ev, shcedule_id, schedule_content) {
       const pro = await client.getProfile(ev.source.userId);
       const record = {
@@ -103,6 +110,32 @@ module.exports = {
           return client.replyMessage(ev.replyToken, {
             type: "text",
             text: "登録しました。"
+          })
+        }
+      })
+    }
+    async function updateSchedule(ev, shcedule_id, schedule_content) {
+      db.update(shcedule_id,schedule_content, (err, data) => {
+        if (err) {
+          console.log(err.message);
+          throw new Error(err);
+        } else {
+          return client.replyMessage(ev.replyToken, {
+            type: "text",
+            text: "更新しました。"
+          })
+        }
+      })
+    }
+    async function deleteSchedule(ev, shcedule_id) {
+      db.delete(shcedule_id, (err, data) => {
+        if (err) {
+          console.log(err.message);
+          throw new Error(err);
+        } else {
+          return client.replyMessage(ev.replyToken, {
+            type: "text",
+            text: "削除しました。"
           })
         }
       })
