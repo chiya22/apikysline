@@ -45,8 +45,15 @@ module.exports = {
       if (event.type === "message" && event.message.type === "text") {
         let recieveContentList = event.message.text.split("\n");
         if (recieveContentList[0] === "追加") {
-          Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
-        }
+
+          validateInsert(recieveContentList, (err, data) => {
+            if (err) {
+              returnMessage(event,err.message);
+            } else {
+              Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
+            }
+          });
+      }
         else if (recieveContentList[0] === "照会") {
           Promise.resolve(returnSchedules(event)).catch(e => console.log(e));
         }
@@ -71,8 +78,14 @@ module.exports = {
           };
         }
         else {
-          Promise.resolve(returnHelp(event)).catch(e => console.log(e));
+          Promise.resolve(returnMessage(event,"コマンドが誤っています。\n以下のリファレンスに従ってコマンドを送信してください。\n1行目：照会/追加/更新/削除\n2行目：日時をyyyyMMddHHmm形式で記入\n3行目：スケジュールの内容を記載")).catch(e => console.log(e));
         }
+      }
+    }
+    function validateInsert(recieveContentList, callback) {
+      if (recieveContentList.length === 2){
+        err.message = "引数の数が違います";
+        callback(err,null);
       }
     }
     async function createSchedule(ev, shcedule_id, schedule_content) {
@@ -111,10 +124,10 @@ module.exports = {
         }
       })
     }
-    async function returnHelp(ev) {
+    async function returnMessage(ev, mes) {
       return client.replyMessage(ev.replyToken, {
         type: "text",
-        text: "コマンドが誤っています。\n以下のリファレンスに従ってコマンドを送信してください。\n1行目：照会/追加/更新/削除\n2行目：日時をyyyyMMddHHmm形式で記入\n3行目：スケジュールの内容を記載"
+        text: mes
       });
     }
   }
