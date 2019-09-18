@@ -65,14 +65,13 @@ module.exports = {
           Promise.resolve(returnSchedules(event)).catch(e => console.log(e));
         }
         else if (event.message.text === "ID") {
-          const userid = event.source.userId;
-          let chatid;
+          let mes = `userID:${event.source.userId}`;
           if (event.source.type === "group") {
-            chatid = event.source.groupId;
+            mes = mes + `\nchatID:${event.source.groupId}`;
           } else if (event.source.type === "room") {
-            chatid = event.source.roomId;
+            mes = mes + `\nchatID:${event.source.roomId}`;
           }
-          Promise.resolve(returnMessage(event,`userID:${userid}\nchatID:${chatid}`));
+          Promise.resolve(returnMessage(event,mes));
         }
         else if (event.message.text === "bot帰れ") {
           if (event.source.type === "group") {
