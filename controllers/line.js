@@ -6,15 +6,15 @@ const cron = require("node-cron");
 module.exports = {
   startCron: () => {
     const client = new line.Client(config);
-    cron.schedule('0 0 12 * * 1-5', () => {
-      Promise.resolve(sendMessage("お昼ですよ、メールしましょ")).catch(e => console.log(e));
-    });
-    cron.schedule('0 0 13 * * 1-5', () => {
-      Promise.resolve(sendMessage("午後が始まりますよ、メールしましょ")).catch(e => console.log(e));
-    });
-    cron.schedule('0 0 16 * * 1-5', () => {
-      Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e => console.log(e));
-    });
+    // cron.schedule('0 0 12 * * 1-5', () => {
+    //   Promise.resolve(sendMessage("お昼ですよ、メールしましょ")).catch(e => console.log(e));
+    // });
+    // cron.schedule('0 0 13 * * 1-5', () => {
+    //   Promise.resolve(sendMessage("午後が始まりますよ、メールしましょ")).catch(e => console.log(e));
+    // });
+    // cron.schedule('0 0 16 * * 1-5', () => {
+    //   Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e => console.log(e));
+    // });
     cron.schedule('0 0 9 28-31 * 1-5', () => {
       const date = new Date();
       const lastDate = getLastDayOfMonth(date.getFullYear(), date.getMonth())
@@ -56,13 +56,23 @@ module.exports = {
           // });
         }
         else if (recieveContentList[0] === "削除") {
-          Promise.resolve(deleteSchedule(event,recieveContentList[1])).catch(e => console.log(e));
+          Promise.resolve(deleteSchedule(event, recieveContentList[1])).catch(e => console.log(e));
         }
         else if (recieveContentList[0] === "更新") {
-          Promise.resolve(updateSchedule(event,recieveContentList[1],recieveContentList[2])).catch(e => console.log(e));
+          Promise.resolve(updateSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
         }
         else if (recieveContentList[0] === "照会") {
           Promise.resolve(returnSchedules(event)).catch(e => console.log(e));
+        }
+        else if (event.message.text === "ID") {
+          const userid = event.source.userId;
+          let chatid;
+          if (event.source.type === "group") {
+            chatid = event.source.groupId;
+          } else if (event.source.type === "room") {
+            chatid = event.source.roomId;
+          }
+          Promise.resolve(returnMessage(event,`userID:${userid}\nchatID:${chatid}`));
         }
         else if (event.message.text === "bot帰れ") {
           if (event.source.type === "group") {
@@ -115,7 +125,7 @@ module.exports = {
       })
     }
     async function updateSchedule(ev, shcedule_id, schedule_content) {
-      db.update(shcedule_id,schedule_content, (err, data) => {
+      db.update(shcedule_id, schedule_content, (err, data) => {
         if (err) {
           console.log(err.message);
           throw new Error(err);

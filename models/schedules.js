@@ -93,14 +93,14 @@ const update = ((schedule_id, schedule_content, callback) => {
 });
 
 // ■ remove
-const remove = ((schedule, callback) => {
+const remove = ((schedule_id, callback) => {
   // connect
   const client = new Client(config);
   client.connect();
 
   let query = {};
   query.text = "delete from schedules where schedule_id = $1";
-  query.values = [schedule.schedule_id];
+  query.values = [schedule_id];
 
   // DELETE
   client.query(query, (err, result) => {
