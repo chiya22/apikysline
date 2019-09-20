@@ -45,18 +45,44 @@ module.exports = {
       if (event.type === "message" && event.message.type === "text") {
         let recieveContentList = event.message.text.split("\n");
         if (recieveContentList[0] === "追加") {
-          Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
-
-          // validateInsert(recieveContentList, (err, data) => {
-          //   if (err) {
-          //     returnMessage(event,err.message);
-          //   } else {
-          //     Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
-          //   }
-          // });
+          if (recieveContentList.length === 2) {
+            Promise.resolve(returnMessage(event, "登録する日時を2行目に、\n登録する内容を3行目に設定してください。"));
+          } else {
+            if (recieveContentList[1].length !== 12) {
+              Promise.resolve(returnMessage(event, "登録する日時は12桁（yyyyMMddHHmm）で設定してください。"));
+            } else {
+              const y = parseInt(recieveContentList[1].substr(0, 4));
+              const m = parseInt(recieveContentList[1].substr(4, 2)) - 1;
+              const d = parseInt(recieveContentList[1].substr(6, 2));
+              const h = parseInt(recieveContentList[1].substr(8, 2));
+              const s = parseInt(recieveContentList[1].substr(10, 2));
+              const dt = new Date(y, m, d, h, m);
+              if (y === dt.getFullYear() && m === dt.getMonth() && d === dt.getDate() && h === dt.getHours() && s === dt.getMinutes()) {
+                db.find(recieveContentList[1], (err, data) => {
+                  if (err) {
+                    Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
+                  } else {
+                    Promise.resolve(returnMessage(event, "すでに登録されている日時です。\n2行目の設定値を確認してください。"));
+                  }
+                })
+              } else {
+                Promise.resolve(returnMessage(event, "登録する日時はyyyyMMddHHmm形式で設定してください。"));
+              };
+            }
+          }
         }
         else if (recieveContentList[0] === "削除") {
-          Promise.resolve(deleteSchedule(event, recieveContentList[1])).catch(e => console.log(e));
+          if (recieveContentList.length === 1) {
+            Promise.resolve(returnMessage(event, "削除する日時を2行目に設定してください。"));
+          } else {
+            db.find(recieveContentList[1], (err, data) => {
+              if (err) {
+                Promise.resolve(returnMessage(event, "削除する対象が存在しません。\n2行目の設定値を確認してください。"));
+              } else {
+                Promise.resolve(deleteSchedule(event, data.shcedule_id)).catch(e => console.log(e));
+              }
+            })
+          }
         }
         else if (recieveContentList[0] === "更新") {
           Promise.resolve(updateSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
@@ -71,7 +97,7 @@ module.exports = {
           } else if (event.source.type === "room") {
             mes = mes + `\nchatID:${event.source.roomId}`;
           }
-          Promise.resolve(returnMessage(event,mes));
+          Promise.resolve(returnMessage(event, mes));
         }
         else if (event.message.text === "bot帰れ") {
           if (event.source.type === "group") {
