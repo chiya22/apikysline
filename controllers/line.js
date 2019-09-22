@@ -44,7 +44,7 @@ module.exports = {
       const event = events[i];
       if (event.type === "message" && event.message.type === "text") {
         let recieveContentList = event.message.text.split("\n");
-        if (recieveContentList[0] === "追加") {
+        if (recieveContentList[0] === "登録") {
           if (recieveContentList.length === 2) {
             Promise.resolve(returnMessage(event, "登録する日時を2行目に、\n登録する内容を3行目に設定してください。"));
           } else {
@@ -57,6 +57,8 @@ module.exports = {
               const h = parseInt(recieveContentList[1].substr(8, 2));
               const s = parseInt(recieveContentList[1].substr(10, 2));
               const dt = new Date(y, m, d, h, m);
+              console.log(`${y},${m},${d},${h},${s}`);
+              console.log(dt.getFullYear & "," & dt.getMonth & "," & dt.getDay() &",F"&dt.getHours() & "," & dt.getMinutes);
               if (y === dt.getFullYear() && m === dt.getMonth() && d === dt.getDate() && h === dt.getHours() && s === dt.getMinutes()) {
                 db.find(recieveContentList[1], (err, data) => {
                   if (err) {
@@ -79,7 +81,7 @@ module.exports = {
               if (err) {
                 Promise.resolve(returnMessage(event, "削除する対象が存在しません。\n2行目の設定値を確認してください。"));
               } else {
-                Promise.resolve(deleteSchedule(event, data.shcedule_id)).catch(e => console.log(e));
+                Promise.resolve(deleteSchedule(event, recieveContentList[1])).catch(e => console.log(e));
               }
             })
           }
@@ -120,7 +122,7 @@ module.exports = {
           };
         }
         else {
-          Promise.resolve(returnMessage(event, "コマンドが誤っています。\n以下のリファレンスに従ってコマンドを送信してください。\n1行目：照会/追加/更新/削除\n2行目：日時をyyyyMMddHHmm形式で記入\n3行目：スケジュールの内容を記載")).catch(e => console.log(e));
+          Promise.resolve(returnMessage(event, "コマンドが誤っています。\n以下のリファレンスに従ってコマンドを送信してください。\n1行目：照会/登録/更新/削除\n2行目：日時をyyyyMMddHHmm形式で記入\n3行目：スケジュールの内容を記載")).catch(e => console.log(e));
         }
       }
     }
