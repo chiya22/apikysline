@@ -42,6 +42,7 @@ const find = ((schedule_id, callback) => {
       .catch((err) => {
         throw err;
       });
+      console.log(result);
     callback(null, result.rows[0]);
   });
 });
