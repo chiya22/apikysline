@@ -51,13 +51,7 @@ module.exports = {
             if (recieveContentList[1].length !== 12) {
               Promise.resolve(returnMessage(event, "登録する日時は12桁（yyyyMMddHHmm）で設定してください。"));
             } else {
-              const y = parseInt(recieveContentList[1].substr(0, 4));
-              const m = parseInt(recieveContentList[1].substr(4, 2)) - 1;
-              const d = parseInt(recieveContentList[1].substr(6, 2));
-              const h = parseInt(recieveContentList[1].substr(8, 2));
-              const s = parseInt(recieveContentList[1].substr(10, 2));
-              const dt = new Date(y, m, d, h, s);
-              if (y === dt.getFullYear() && m === dt.getMonth() && d === dt.getDate() && h === dt.getHours() && s === dt.getMinutes()) {
+              if (checkStringToDate(recieveContentList[1])) {
                 db.find(recieveContentList[1], (err, data) => {
                   if (err) {
                     console.log(err.message);
@@ -65,6 +59,7 @@ module.exports = {
                   } else {
                     if (data) {
                       Promise.resolve(returnMessage(event, "すでに登録されている日時です。\n2行目の設定値を確認してください。"));
+                      F
                     } else {
                       Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
                     }
@@ -95,7 +90,22 @@ module.exports = {
           }
         }
         else if (recieveContentList[0] === "更新") {
-          Promise.resolve(updateSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
+          if (recieveContentList.length !== 3) {
+            Promise.resolve(returnMessage(event, "更新する日時を2行目に、\n更新する内容を3行目に設定してください。"));
+          } else {
+            db.find(recieveContentList[1], (err, data) => {
+              if (err) {
+                console.log(err.message);
+                throw new Error(err);
+              } else {
+                if (data) {
+                  Promise.resolve(updateSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
+                } else {
+                  Promise.resolve(returnMessage(event, "更新する対象が存在しません。\n2行目の設定値を確認してください。"));
+                }
+              }
+            })
+          }
         }
         else if (recieveContentList[0] === "照会") {
           Promise.resolve(returnSchedules(event)).catch(e => console.log(e));
@@ -140,6 +150,19 @@ module.exports = {
     //     callback(err, null);
     //   }
     // }
+    function checkStringToDate(str) {
+      const y = parseInt(recieveContentList[1].substr(0, 4));
+      const m = parseInt(recieveContentList[1].substr(4, 2)) - 1;
+      const d = parseInt(recieveContentList[1].substr(6, 2));
+      const h = parseInt(recieveContentList[1].substr(8, 2));
+      const s = parseInt(recieveContentList[1].substr(10, 2));
+      const dt = new Date(y, m, d, h, s);
+      if (y === dt.getFullYear() && m === dt.getMonth() && d === dt.getDate() && h === dt.getHours() && s === dt.getMinutes()) {
+        return true;
+      } else {
+        return false;
+      }
+    }
     async function createSchedule(ev, shcedule_id, schedule_content) {
       const pro = await client.getProfile(ev.source.userId);
       const record = {
