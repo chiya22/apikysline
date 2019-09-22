@@ -56,7 +56,8 @@ module.exports = {
               const d = parseInt(recieveContentList[1].substr(6, 2));
               const h = parseInt(recieveContentList[1].substr(8, 2));
               const s = parseInt(recieveContentList[1].substr(10, 2));
-              const dt = new Date(y, m, d, h, m);
+              const dt = new Date(y, m, d, h, s);
+              console.log(dt);
               console.log(`${y},${m},${d},${h},${s}`);
               console.log(dt.getFullYear() & "," & dt.getMonth() & "," & dt.getDay() &",F"&dt.getHours() & "," & dt.getMinutes());
               if (y === dt.getFullYear() && m === dt.getMonth() && d === dt.getDate() && h === dt.getHours() && s === dt.getMinutes()) {
