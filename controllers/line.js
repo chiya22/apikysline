@@ -45,6 +45,7 @@ module.exports = {
       if (event.type === "message" && event.message.type === "text") {
         let recieveContentList = event.message.text.split("\n");
         if (recieveContentList[0] === "登録") {
+          console.log(`kength:${recieveContentList.length}`)
           if (recieveContentList.length !== 2) {
             Promise.resolve(returnMessage(event, "登録する日時を2行目に、\n登録する内容を3行目に設定してください。"));
           } else {
@@ -65,7 +66,7 @@ module.exports = {
                   if (err) {
                     Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
                   } else {
-                    console.log(data.shcedule_id)
+                    console.log(data)
                     Promise.resolve(returnMessage(event, "すでに登録されている日時です。\n2行目の設定値を確認してください。"));
                   }
                 })
@@ -83,7 +84,7 @@ module.exports = {
               if (err) {
                 Promise.resolve(returnMessage(event, "削除する対象が存在しません。\n2行目の設定値を確認してください。"));
               } else {
-                console.log(data.shcedule_id);
+                console.log(data);
                 Promise.resolve(deleteSchedule(event, recieveContentList[1])).catch(e => console.log(e));
               }
             })
