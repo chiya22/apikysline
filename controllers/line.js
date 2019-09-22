@@ -58,13 +58,14 @@ module.exports = {
               const s = parseInt(recieveContentList[1].substr(10, 2));
               const dt = new Date(y, m, d, h, s);
               console.log(dt);
+              console.log(dt.getFullYear());
               console.log(`${y},${m},${d},${h},${s}`);
-              console.log(dt.getFullYear() & "," & dt.getMonth() & "," & dt.getDay() &",F"&dt.getHours() & "," & dt.getMinutes());
               if (y === dt.getFullYear() && m === dt.getMonth() && d === dt.getDate() && h === dt.getHours() && s === dt.getMinutes()) {
                 db.find(recieveContentList[1], (err, data) => {
                   if (err) {
                     Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
                   } else {
+                    console.log(data.shcedule_id)
                     Promise.resolve(returnMessage(event, "すでに登録されている日時です。\n2行目の設定値を確認してください。"));
                   }
                 })
@@ -82,6 +83,7 @@ module.exports = {
               if (err) {
                 Promise.resolve(returnMessage(event, "削除する対象が存在しません。\n2行目の設定値を確認してください。"));
               } else {
+                console.log(data.shcedule_id);
                 Promise.resolve(deleteSchedule(event, recieveContentList[1])).catch(e => console.log(e));
               }
             })
