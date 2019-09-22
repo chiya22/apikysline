@@ -45,7 +45,7 @@ module.exports = {
       if (event.type === "message" && event.message.type === "text") {
         let recieveContentList = event.message.text.split("\n");
         if (recieveContentList[0] === "登録") {
-          if (recieveContentList.length === 2) {
+          if (recieveContentList.length !== 2) {
             Promise.resolve(returnMessage(event, "登録する日時を2行目に、\n登録する内容を3行目に設定してください。"));
           } else {
             if (recieveContentList[1].length !== 12) {
@@ -58,7 +58,7 @@ module.exports = {
               const s = parseInt(recieveContentList[1].substr(10, 2));
               const dt = new Date(y, m, d, h, m);
               console.log(`${y},${m},${d},${h},${s}`);
-              console.log(dt.getFullYear & "," & dt.getMonth & "," & dt.getDay() &",F"&dt.getHours() & "," & dt.getMinutes);
+              console.log(dt.getFullYear() & "," & dt.getMonth() & "," & dt.getDay() &",F"&dt.getHours() & "," & dt.getMinutes());
               if (y === dt.getFullYear() && m === dt.getMonth() && d === dt.getDate() && h === dt.getHours() && s === dt.getMinutes()) {
                 db.find(recieveContentList[1], (err, data) => {
                   if (err) {
