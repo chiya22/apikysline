@@ -35,6 +35,69 @@ module.exports = {
   },
   returnMessage: (req, res) => {
 
+    function checkRecieveContentForInsert(recieveContentList){
+      if (recieveContentList.length !== 3){
+        return "登録する日時を2行目に、\n登録する内容を3行目に設定してください。"
+      }
+      if (recieveContentList[1].length !== 12){
+        return "登録する日時は12桁（yyyyMMddHHmm）で設定してください。"
+      }
+      if (!checkStringToDate(recieveContentList[1])){
+        return "登録する日時はyyyyMMddHHmm形式で設定してください。"
+      }
+
+      db.find(recieveContentList[1], (err, data) => {
+        if (err) {
+          console.log(err.message);
+          throw new Error(err);
+        } else {
+          if (data) {
+            return "すでに登録されている日時です。\n2行目の設定値を確認してください。";
+          }
+        }
+      })
+
+      return null;
+    }
+
+    function checkRecieveContentForDelete(recieveContentList){
+      if (recieveContentList.length !== 2){
+        return "削除する日時を2行目に設定してください。"
+      }
+
+      db.find(recieveContentList[1], (err, data) => {
+        if (err) {
+          console.log(err.message);
+          throw new Error(err);
+        } else {
+          if (!data) {
+            return "削除する対象が存在しません。\n2行目の設定値を確認してください。";
+          }
+        }
+      })
+
+      return null;
+    }
+
+    function checkRecieveContentForUpdate(recieveContentList){
+      if (recieveContentList.length !== 3){
+        return "更新する日時を2行目に、\n更新する内容を3行目に設定してください。"
+      }
+
+      db.find(recieveContentList[1], (err, data) => {
+        if (err) {
+          console.log(err.message);
+          throw new Error(err);
+        } else {
+          if (!data) {
+            return "更新する対象が存在しません。\n2行目の設定値を確認してください。";
+          }
+        }
+      })
+
+      return null;
+    }
+
     //　最初にstatusを正常に設定しておく
     res.status(200).end();
 
@@ -44,67 +107,29 @@ module.exports = {
       const event = events[i];
       if (event.type === "message" && event.message.type === "text") {
         let recieveContentList = event.message.text.split("\n");
+        let mes;
         if (recieveContentList[0] === "登録") {
-          if (recieveContentList.length !== 3) {
-            Promise.resolve(returnMessage(event, "登録する日時を2行目に、\n登録する内容を3行目に設定してください。"));
-          } else {
-            if (recieveContentList[1].length !== 12) {
-              Promise.resolve(returnMessage(event, "登録する日時は12桁（yyyyMMddHHmm）で設定してください。"));
-            } else {
-              if (checkStringToDate(recieveContentList[1])) {
-                db.find(recieveContentList[1], (err, data) => {
-                  if (err) {
-                    console.log(err.message);
-                    throw new Error(err);
-                  } else {
-                    if (data) {
-                      Promise.resolve(returnMessage(event, "すでに登録されている日時です。\n2行目の設定値を確認してください。"));
-                      F
-                    } else {
-                      Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
-                    }
-                  }
-                })
-              } else {
-                Promise.resolve(returnMessage(event, "登録する日時はyyyyMMddHHmm形式で設定してください。"));
-              };
-            }
+          mes =checkRecieveContentForInsert(recieveContentList)
+          if (mes){
+            Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
+          }else{
+            Promise.resolve(returnMessage(event, mes));
           }
         }
         else if (recieveContentList[0] === "削除") {
-          if (recieveContentList.length !== 2) {
-            Promise.resolve(returnMessage(event, "削除する日時を2行目に設定してください。"));
-          } else {
-            db.find(recieveContentList[1], (err, data) => {
-              if (err) {
-                console.log(err.message);
-                throw new Error(err);
-              } else {
-                if (data) {
-                  Promise.resolve(deleteSchedule(event, recieveContentList[1])).catch(e => console.log(e));
-                } else {
-                  Promise.resolve(returnMessage(event, "削除する対象が存在しません。\n2行目の設定値を確認してください。"));
-                }
-              }
-            })
+          mes = checkRecieveContentForDelete(recieveContentList)
+          if (mes){
+            Promise.resolve(deleteSchedule(event, recieveContentList[1])).catch(e => console.log(e));
+          }else{
+            Promise.resolve(returnMessage(event, mes));
           }
         }
         else if (recieveContentList[0] === "更新") {
-          if (recieveContentList.length !== 3) {
-            Promise.resolve(returnMessage(event, "更新する日時を2行目に、\n更新する内容を3行目に設定してください。"));
-          } else {
-            db.find(recieveContentList[1], (err, data) => {
-              if (err) {
-                console.log(err.message);
-                throw new Error(err);
-              } else {
-                if (data) {
-                  Promise.resolve(updateSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
-                } else {
-                  Promise.resolve(returnMessage(event, "更新する対象が存在しません。\n2行目の設定値を確認してください。"));
-                }
-              }
-            })
+          mes = checkRecieveContentForUpdate(recieveContentList)
+          if (mes){
+            Promise.resolve(updateSchedule(event, recieveContentList[1],recieveContentList[2])).catch(e => console.log(e));
+          }else{
+            Promise.resolve(returnMessage(event, mes));
           }
         }
         else if (recieveContentList[0] === "照会") {
