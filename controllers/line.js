@@ -265,13 +265,11 @@ module.exports = {
           throw new Error(err);
         } else {
           if (data.rowCount === 0) {
-            console.log("kokomadekiteru?")
             return client.replyMessage(ev.replyToken, {
-              type: "test",
+              type: "text",
               text: "1件も登録されていません。"
-            });
+            })
           } else {
-            console.log("soretomokochira?")
             let returnMessage = `全部で${data.rowCount}件登録されています。\n-----\n`;
             for (i = 0; i < data.rowCount; i++) {
               returnMessage += `日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[i].schedule_content}\n登録者：${data.rows[i].created_username}\n-----\n`;
