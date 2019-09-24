@@ -265,7 +265,7 @@ module.exports = {
           throw new Error(err);
         } else {
           if (data.rowCount === 0) {
-            return client.replyMessage(ev, {
+            return client.replyMessage(ev.replyToken, {
               type: "test",
               text: "1件も登録されていません。"
             });
