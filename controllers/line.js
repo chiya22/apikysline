@@ -73,7 +73,7 @@ module.exports = {
         let mes;
         if (recieveContentList[0] === "登録") {
           mes = checkRecieveContentForInsert(recieveContentList)
-          if (mes !== null) {
+          if (mes === null) {
             Promise.resolve(createSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
           } else {
             Promise.resolve(returnMessage(event, mes));
@@ -81,7 +81,7 @@ module.exports = {
         }
         else if (recieveContentList[0] === "削除") {
           mes = checkRecieveContentForDelete(recieveContentList)
-          if (mes !== null) {
+          if (mes === null) {
             Promise.resolve(deleteSchedule(event, recieveContentList[1])).catch(e => console.log(e));
           } else {
             Promise.resolve(returnMessage(event, mes));
@@ -89,7 +89,7 @@ module.exports = {
         }
         else if (recieveContentList[0] === "更新") {
           mes = checkRecieveContentForUpdate(recieveContentList)
-          if (mes !== null) {
+          if (mes === null) {
             Promise.resolve(updateSchedule(event, recieveContentList[1], recieveContentList[2])).catch(e => console.log(e));
           } else {
             Promise.resolve(returnMessage(event, mes));
