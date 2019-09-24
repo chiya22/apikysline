@@ -199,7 +199,7 @@ module.exports = {
     function checkStringToDate(str) {
       const y = parseInt(str.substr(0, 4));
       const m = parseInt(str.substr(4, 2)) - 1;
-      const d = parseInt(str.bstr(6, 2));
+      const d = parseInt(str.substr(6, 2));
       const h = parseInt(str.substr(8, 2));
       const s = parseInt(str.substr(10, 2));
       const dt = new Date(y, m, d, h, s);
