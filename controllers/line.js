@@ -197,11 +197,11 @@ module.exports = {
     }
     //文字列の日付チェック
     function checkStringToDate(str) {
-      const y = parseInt(recieveContentList[1].substr(0, 4));
-      const m = parseInt(recieveContentList[1].substr(4, 2)) - 1;
-      const d = parseInt(recieveContentList[1].substr(6, 2));
-      const h = parseInt(recieveContentList[1].substr(8, 2));
-      const s = parseInt(recieveContentList[1].substr(10, 2));
+      const y = parseInt(str[1].substr(0, 4));
+      const m = parseInt(str[1].substr(4, 2)) - 1;
+      const d = parseInt(str[1].substr(6, 2));
+      const h = parseInt(str[1].substr(8, 2));
+      const s = parseInt(str[1].substr(10, 2));
       const dt = new Date(y, m, d, h, s);
       if (y === dt.getFullYear() && m === dt.getMonth() && d === dt.getDate() && h === dt.getHours() && s === dt.getMinutes()) {
         return true;
