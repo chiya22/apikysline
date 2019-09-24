@@ -265,7 +265,10 @@ module.exports = {
           throw new Error(err);
         } else {
           if (data.rowCount === 0) {
-            return client.returnMessage(ev, "1件も登録されていません。");
+            return client.replyMessage(ev, {
+              type: "test",
+              text: "1件も登録されていません。"
+            });
           } else {
             let returnMessage = `全部で${data.rowCount}件登録されています。\n-----\n`;
             for (i = 0; i < data.rowCount; i++) {
