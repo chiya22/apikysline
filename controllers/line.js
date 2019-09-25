@@ -16,7 +16,6 @@ module.exports = {
     //   Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e => console.log(e));
     // });
     cron.schedule('0 0 7 * * *', () => {
-      const date = new Date();
       db.findAll((err, data) => {
         if (err) {
           console.log(err.message);
@@ -25,6 +24,22 @@ module.exports = {
           for (i = 0; i < data.rowCount; i++) {
             if (checkDayAgo(data.rows[i].schedule_id, 5)) {
               let returnMessage = `予定が近づいています。\n日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[i].schedule_content}\n登録者：${data.rows[i].created_username}\n-----\n`;
+              Promise.resolve(sendMessage(returnMessage)).catch(e => console.log(e));
+            }
+          }
+        }
+      })
+    });
+    cron.schedule('0 59 23 * * *', () => {
+      const date = new Date();
+      db.findAll((err, data) => {
+        if (err) {
+          console.log(err.message);
+          throw new Error(err);
+        } else {
+          for (i = 0; i < data.rowCount; i++) {
+            if (checkDayAgo(data.rows[i].schedule_id, 0)) {
+              let returnMessage = `この予定は過去になりました。\n日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[i].schedule_content}\n登録者：${data.rows[i].created_username}\n-----\n`;
               Promise.resolve(sendMessage(returnMessage)).catch(e => console.log(e));
             }
           }
@@ -69,6 +84,9 @@ module.exports = {
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
       if (event.type === "message" && event.message.type === "text") {
+        if (event.source.userId !== "Ub09377720f78d780eec5acac8eb075d4"){
+          Promise.resolve(returnMessage(event, "..."));
+        }
         let recieveContentList = event.message.text.split("\n");
         let mes;
         if (recieveContentList[0] === "登録") {
