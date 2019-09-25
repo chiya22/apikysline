@@ -59,10 +59,12 @@ module.exports = {
         text: mes
       })
     }
+    //月末日を取得する
     function getLastDayOfMonth(year, month) {
       let date = new Date(year, month + 1, 0);
       return date.getDate();
     }
+    //指定した日付文字列から指定した日数分引いた日が、現在の日付と合致しているかチェックする
     function checkDayAgo(str, days) {
       let date = new Date(str.substr(0, 4), str.substr(4, 2) - 1, str.substr(6, 2));
       date.getDate() - days;
@@ -84,6 +86,7 @@ module.exports = {
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
       if (event.type === "message" && event.message.type === "text") {
+        //自分以外には「...」を返答するのみとする
         if (event.source.userId !== "Ub09377720f78d780eec5acac8eb075d4"){
           Promise.resolve(returnMessage(event, "..."));
         }
@@ -117,6 +120,7 @@ module.exports = {
           Promise.resolve(returnSchedules(event)).catch(e => console.log(e));
         }
         else if (event.message.text === "ID") {
+          //現在のIDとチャットのIDを返却する
           let mes = `userID:${event.source.userId}`;
           if (event.source.type === "group") {
             mes = mes + `\nchatID:${event.source.groupId}`;
@@ -126,6 +130,7 @@ module.exports = {
           Promise.resolve(returnMessage(event, mes));
         }
         else if (event.message.text === "bot帰れ") {
+          //チャットに登録されている場合、チャットから退室させる
           if (event.source.type === "group") {
             client.leaveGroup(event.source.groupId)
               .then(() => {
