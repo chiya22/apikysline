@@ -18,25 +18,32 @@ module.exports = {
     //   Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e => console.log(e));
     // });
     cron.schedule('0 45 * * * *', () => {
-      request('http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_keisei', (e, response, body) => {
-        if (e) {
-          console.error(e)
-        }
-        try {
-          const dom = new JSDOM(body)
-          const title = dom.window.document.getElementsByTagName('title')[0]
-          const statuslist = dom.window.document.getElementsByClassName('corner_block_row_detail_d')
-          for (var i = 0; i < statuslist.length; i++) {
-            const status = statuslist[i].innerHTML.trim();
-            if (status != '現在、平常通り運転しています。'　&& status != '情報提供時間は4：00～翌2：00となっています。') {
-              Promise.resolve(sendMessage(`${title.innerHTML.trim()}\n${status}`)).catch(e => console.log(e));
-            } else {
-              console.log(title.innerHTML.trim() + 'ok');
-            }
+      const urlarray = [
+        'http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_chuosobu',
+        'http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_keisei'
+      ]
+
+      urlarray.forEach((url) => {
+        request(url, (e, response, body) => {
+          if (e) {
+            console.error(e)
           }
-        } catch (e) {
-          console.error(e)
-        }
+          try {
+            const dom = new JSDOM(body)
+            const title = dom.window.document.getElementsByTagName('title')[0]
+            const statuslist = dom.window.document.getElementsByClassName('corner_block_row_detail_d')
+            for (var i = 0; i < statuslist.length; i++) {
+              const status = statuslist[i].innerHTML.trim();
+              if (status != '現在、平常通り運転しています。' && status != '情報提供時間は4：00～翌2：00となっています。') {
+                Promise.resolve(sendMessage(`${title.innerHTML.trim()}\n${status}`)).catch(e => console.log(e));
+              } else {
+                console.log(title.innerHTML.trim() + 'ok');
+              }
+            }
+          } catch (e) {
+            console.error(e)
+          }
+        })
       })
     })
     cron.schedule('0 0 7 * * *', () => {
