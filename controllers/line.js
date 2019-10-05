@@ -17,21 +17,21 @@ module.exports = {
     // cron.schedule('0 0 16 * * 1-5', () => {
     //   Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e => console.log(e));
     // });
-    cron.schedule('0 20 * * * *', () => {
+    cron.schedule('0 25 * * * *', () => {
       request('http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_keisei', (e, response, body) => {
         if (e) {
           console.error(e)
         }
         try {
           const dom = new JSDOM(body)
-          const title = dom.window.document.getElementsByTagName('title').innerHTML
+          const title = dom.window.document.getElementsByTagName('title')[0]
           const statuslist = dom.window.document.getElementsByClassName('corner_block_row_detail_d')
           for (var i = 0; i < statuslist.length; i++) {
             const text = statuslist[i].innerHTML;
-            if (text !== '現在、平常通り運転しています。' && text !== '情報提供時間は4：00～翌2：00となっています。') {
-              Promise.resolve(sendMessage(`${title}\n${text}`)).catch(e => console.log(e));
+            if (text !== '現在、平常通り運転しています。') {
+              Promise.resolve(sendMessage(`${title.innerHTML}\n${text}`)).catch(e => console.log(e));
             } else {
-              console.log(title + 'ok');
+              console.log(title.innerHTML + 'ok');
             }
           }
         } catch (e) {
