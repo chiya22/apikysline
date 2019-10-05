@@ -115,12 +115,12 @@ module.exports = {
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
       if (event.type === "message" && event.message.type === "text") {
-        //自分以外には「...」を返答するのみとする
-        if (event.source.userId !== "Ub09377720f78d780eec5acac8eb075d4") {
-          Promise.resolve(returnMessage(event, "..."));
-        }
         let recieveContentList = event.message.text.split("\n");
         let mes;
+        //自分以外で照会コマンド以外を受信した場合には「...」を返答するのみとする
+        if (event.source.userId !== "Ub09377720f78d780eec5acac8eb075d4" && recieveContentList[0] !=="照会") {
+          Promise.resolve(returnMessage(event, "..."));
+        }
         if (recieveContentList[0] === "登録") {
           mes = checkRecieveContentForInsert(recieveContentList)
           if (mes === null) {
