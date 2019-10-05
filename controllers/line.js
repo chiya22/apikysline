@@ -17,7 +17,7 @@ module.exports = {
     // cron.schedule('0 0 16 * * 1-5', () => {
     //   Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e => console.log(e));
     // });
-    cron.schedule('0 45 * * * *', () => {
+    cron.schedule('0 */5 * * * *', () => {
       const urlarray = [
         'http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_chuosobu',
         'http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_keisei'
