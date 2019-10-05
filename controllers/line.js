@@ -2,6 +2,8 @@ const line = require("@line/bot-sdk");
 const config = require("../config/line.config");
 const db = require("../models/schedules");
 const cron = require("node-cron");
+const request = require('request')
+const { JSDOM } = require('jsdom');
 
 module.exports = {
   startCron: () => {
@@ -15,6 +17,26 @@ module.exports = {
     // cron.schedule('0 0 16 * * 1-5', () => {
     //   Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e => console.log(e));
     // });
+    cron.schedule('0 10 * * * *', () => {
+      request('http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_keisei', (e, response, body) => {
+        if (e) {
+          console.error(e)
+        }
+        try {
+          const dom = new JSDOM(body)
+          const title = dom.window.document.getElementsByTag('title')
+          const statuslist = dom.window.document.getElementsByClassName('corner_block_row_detail_d')
+          for (var i = 0; i < statuslist.length; i++) {
+            const text = statuslist[i].innerHTML;
+            if (text != '現在、平常通り運転しています。' && text != '情報提供時間は4：00～翌2：00となっています。') {
+              Promise.resolve(sendMessage(`${title}\n${text}`)).catch(e => console.log(e));
+            }
+          }
+        } catch (e) {
+          console.error(e)
+        }
+      })
+    })
     cron.schedule('0 0 7 * * *', () => {
       db.findAll((err, data) => {
         if (err) {
@@ -87,7 +109,7 @@ module.exports = {
       const event = events[i];
       if (event.type === "message" && event.message.type === "text") {
         //自分以外には「...」を返答するのみとする
-        if (event.source.userId !== "Ub09377720f78d780eec5acac8eb075d4"){
+        if (event.source.userId !== "Ub09377720f78d780eec5acac8eb075d4") {
           Promise.resolve(returnMessage(event, "..."));
         }
         let recieveContentList = event.message.text.split("\n");
