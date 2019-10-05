@@ -17,7 +17,7 @@ module.exports = {
     // cron.schedule('0 0 16 * * 1-5', () => {
     //   Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e => console.log(e));
     // });
-    cron.schedule('0 35 * * * *', () => {
+    cron.schedule('0 45 * * * *', () => {
       request('http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_keisei', (e, response, body) => {
         if (e) {
           console.error(e)
@@ -28,7 +28,7 @@ module.exports = {
           const statuslist = dom.window.document.getElementsByClassName('corner_block_row_detail_d')
           for (var i = 0; i < statuslist.length; i++) {
             const status = statuslist[i].innerHTML.trim();
-            if (status != '現在、平常通り運転しています。') {
+            if (status != '現在、平常通り運転しています。'　&& status != '情報提供時間は4：00～翌2：00となっています。') {
               Promise.resolve(sendMessage(`${title.innerHTML.trim()}\n${status}`)).catch(e => console.log(e));
             } else {
               console.log(title.innerHTML.trim() + 'ok');
