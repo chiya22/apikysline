@@ -123,16 +123,16 @@ module.exports = {
       let dayago = new Date();
       dayago.setDate( dayago.getDate() + days);
       const dayagoYYYY = dayago.getFullYear();
-      const dayagoMM = dayago.getMonth();
+      const dayagoMM = dayago.getMonth()+1;
       const dayagoDD = dayago.getDate();
       console.log(`yyyy:${dayagoYYYY},mm:${dayagoMM},dd:${dayagoDD}`);
+      console.log(`str:${str}`);
 
-      // if (date === dateToday) {
-      //   return true;
-      // } else {
-      //   return false;
-      // }
-      return false;
+      if ((str.substr(1,4)===dayagoYYYY) && (str.substr(5,2)===dayagoMM) && (str.substr(8,2)===dayagoDD)){
+        return true;
+      }else{
+        return false;
+      }
     }
   },
   returnMessage: (req, res) => {
