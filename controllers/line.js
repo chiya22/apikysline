@@ -127,9 +127,9 @@ module.exports = {
       const dayagoDD = dayago.getDate();
       console.log(`yyyy:${dayagoYYYY},mm:${dayagoMM},dd:${dayagoDD}`);
       console.log(`str:${str}`);
-      console.log(str.substr(1,4));
-      console.log(str.substr(5,2));
-      console.log(str.substr(8,2));
+      console.log(str.substr(0,4));
+      console.log(str.substr(4,2));
+      console.log(str.substr(7,2));
       if ((str.substr(1,4)==dayagoYYYY) && (str.substr(5,2)==dayagoMM) && (str.substr(8,2)==dayagoDD)){
         return true;
       }else{
