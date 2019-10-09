@@ -68,8 +68,8 @@ module.exports = {
     //     })
     //   })
     // })
-    cron.schedule('0 */5 * * * *', () => {
-      // cron.schedule('0 0 7 * * *', () => {
+    //    cron.schedule('0 */5 * * * *', () => {
+    cron.schedule('0 0 7 * * *', () => {
       db.findAll((err, data) => {
         if (err) {
           console.log(err.message);
@@ -77,7 +77,7 @@ module.exports = {
         } else {
           for (i = 0; i < data.rowCount; i++) {
             if (checkDayAgo(data.rows[i].schedule_id, 5)) {
-              let returnMessage = `予定が近づいています。\n日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[i].schedule_content}\n登録者：${data.rows[i].created_username}\n-----\n`;
+              let returnMessage = `\n-----\n予定が近づいています。\n日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[i].schedule_content}\n登録者：${data.rows[i].created_username}\n-----\n`;
               Promise.resolve(sendMessage(returnMessage)).catch(e => console.log(e));
             }
           }
@@ -121,18 +121,13 @@ module.exports = {
     //指定した日付文字列から指定した日数分引いた日が、現在の日付と合致しているかチェックする
     function checkDayAgo(str, days) {
       let dayago = new Date();
-      dayago.setDate( dayago.getDate() + days);
+      dayago.setDate(dayago.getDate() + days);
       const dayagoYYYY = dayago.getFullYear();
-      const dayagoMM = dayago.getMonth()+1;
-      const dayagoDD = dayago.getDate();
-      console.log(`yyyy:${dayagoYYYY},mm:${dayagoMM},dd:${dayagoDD}`);
-      console.log(`str:${str}`);
-      console.log(str.substr(0,4));
-      console.log(str.substr(4,2));
-      console.log(str.substr(6,2));
-      if ((str.substr(0,4)==dayagoYYYY) && (str.substr(4,2)==dayagoMM) && (str.substr(6,2)==dayagoDD)){
+      const dayagoMM = ("0" + dayago.getMonth() + 1).slice(-2);
+      const dayagoDD = ("0" + dayago.getDate()).slice(-2);
+      if ((str.substr(0, 4) == dayagoYYYY) && (str.substr(4, 2) == dayagoMM) && (str.substr(6, 2) == dayagoDD)) {
         return true;
-      }else{
+      } else {
         return false;
       }
     }
@@ -150,7 +145,7 @@ module.exports = {
         let recieveContentList = event.message.text.split("\n");
         let mes;
         //自分以外で照会コマンド以外を受信した場合には「...」を返答するのみとする
-        if (event.source.userId !== "Ub09377720f78d780eec5acac8eb075d4" && recieveContentList[0] !=="照会") {
+        if (event.source.userId !== "Ub09377720f78d780eec5acac8eb075d4" && recieveContentList[0] !== "照会") {
           Promise.resolve(returnMessage(event, "..."));
         }
         if (recieveContentList[0] === "登録") {
