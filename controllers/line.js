@@ -68,7 +68,8 @@ module.exports = {
     //     })
     //   })
     // })
-    cron.schedule('0 0 7 * * *', () => {
+    cron.schedule('0 */5 * * * *', () => {
+      // cron.schedule('0 0 7 * * *', () => {
       db.findAll((err, data) => {
         if (err) {
           console.log(err.message);
@@ -122,6 +123,8 @@ module.exports = {
       let date = new Date(str.substr(0, 4), str.substr(4, 2) - 1, str.substr(6, 2));
       date.getDate() - days;
       const dateToday = new Date();
+      console.log(`date:${date}`);
+      console.log(`dateToday:${dateToday}`);
       if (date === dateToday) {
         return true;
       } else {
