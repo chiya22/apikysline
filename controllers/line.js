@@ -120,16 +120,19 @@ module.exports = {
     }
     //指定した日付文字列から指定した日数分引いた日が、現在の日付と合致しているかチェックする
     function checkDayAgo(str, days) {
-      let date = new Date(str.substr(0, 4), str.substr(4, 2) - 1, str.substr(6, 2));
-      date.getDate() - days;
-      const dateToday = new Date();
-      console.log(`date:${date}`);
-      console.log(`dateToday:${dateToday}`);
-      if (date === dateToday) {
-        return true;
-      } else {
-        return false;
-      }
+      let dayago = new Date();
+      dayago.setDate( dayago.getDate() + days);
+      const dayagoYYYY = dayago.getFullYear();
+      const dayagoMM = dayago.getMonth();
+      const dayagoDD = dayago.getDate();
+      console.log(`yyyy:${dayagoYYYY},mm:${dayagoMM},dd:${dayagoDD}`);
+
+      // if (date === dateToday) {
+      //   return true;
+      // } else {
+      //   return false;
+      // }
+      return false;
     }
   },
   returnMessage: (req, res) => {
