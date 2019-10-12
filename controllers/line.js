@@ -101,8 +101,6 @@ module.exports = {
           throw new Error(err);
         }
         if (data) {
-          console.log(`status:${status}`)
-          console.log(`data.status:${data.status}`)
           if (status != data.status) {
             dbUnkous.update(url, status, (err, data) => {
               if (err) {
