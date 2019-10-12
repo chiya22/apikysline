@@ -18,7 +18,7 @@ module.exports = {
     // cron.schedule('0 0 16 * * 1-5', () => {
     //   Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e => console.log(e));
     // });
-    cron.schedule('0 */5 * * * *', () => {
+    cron.schedule('0 */59 * * * *', () => {
       //中央総武線、京成
       const urlarray = [
         'http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_chuosobu',
