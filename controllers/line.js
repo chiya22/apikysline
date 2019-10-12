@@ -31,17 +31,17 @@ module.exports = {
           }
           try {
             const dom = new JSDOM(body)
-            const title = dom.window.document.getElementsByTagName('title')[0]
+            const title = dom.window.document.getElementsByTagName('title')[0].innerHTML.trim()
             const statuslist = dom.window.document.getElementsByClassName('corner_block_row_detail_d')
             let concatStatus;
             for (var i = 0; i < statuslist.length; i++) {
-              concatStatus += statuslist[i].innerHTML.trim() + "\n"
+              if (concatStatus !== null) {
+                concatStatus += `${statuslist[i].innerHTML.trim()}\n`
+              } else {
+                concatStatus = `${statuslist[i].innerHTML.trim()}\n`
+              }
             }
-            if (checkStatusUnko(url,concatStatus)){
-              console.log(`sendMessage:${concatStatus}`)
-              Promise.resolve(sendMessage(`${title.innerHTML.trim()}\n${concatStatus}`)).catch(e => console.log(e));
-            }
-
+            checkStatusUnko(url,title,concatStatus)
           } catch (e) {
             console.error(e)
           }
@@ -94,7 +94,7 @@ module.exports = {
       })
     }
     //■運行状況用
-    function checkStatusUnko(url, status) {
+    function checkStatusUnko(url, title, status) {
       dbUnkous.find(url, (err, data) => {
         if (err) {
           console.log(err);
@@ -109,7 +109,8 @@ module.exports = {
                 console.log(err);
                 throw new Error(err);
               }
-              return true
+              console.log("sendmessage")
+              Promise.resolve(sendMessage(`${title}\n${status}`)).catch(e => console.log(e))
             })
           }
         } else {
@@ -123,7 +124,8 @@ module.exports = {
               console.log(err)
               throw new Error(err)
             }
-            return true
+            console.log("sendmessage")
+            Promise.resolve(sendMessage(`${title}\n${status}`)).catch(e => console.log(e))
           })
         }
         return false
