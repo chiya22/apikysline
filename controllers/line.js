@@ -1,8 +1,8 @@
 const line = require("@line/bot-sdk");
 const config = require("../config/line.config");
 const db = require("../models/schedules");
-const dbUnkous = require("../models/unkous");
 const cron = require("node-cron");
+const dbUnkous = require("../models/unkous");
 const request = require('request')
 const { JSDOM } = require('jsdom');
 
@@ -18,56 +18,33 @@ module.exports = {
     // cron.schedule('0 0 16 * * 1-5', () => {
     //   Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e => console.log(e));
     // });
-    // cron.schedule('0 */15 * * * *', () => {
-    //   //中央総武線、京成
-    //   const urlarray = [
-    //     'http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_chuosobu',
-    //     'http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_keisei'
-    //   ]
-    //   urlarray.forEach((url) => {
-    //     request(url, (e, response, body) => {
-    //       if (e) {
-    //         console.error(e)
-    //       }
-    //       try {
-    //         const dom = new JSDOM(body)
-    //         const title = dom.window.document.getElementsByTagName('title')[0]
-    //         const statuslist = dom.window.document.getElementsByClassName('corner_block_row_detail_d')
-    //         for (var i = 0; i < statuslist.length; i++) {
-    //           const status = statuslist[i].innerHTML.trim();
-    //           dbUnkous.find(url,(err,data)=>{
-    //             if (err){
-    //               console.log(err);
-    //               throw new Error(err);
-    //             }
-    //             if (data){
-    //               // if (status != '現在、平常通り運転しています。' && status != '情報提供時間は4：00～翌2：00となっています。') {
-    //               if (status != data.status) {
-    //                 dbUnkous.update(url,status,(err,data)=>{
-    //                   if (err){
-    //                     console.log(err);
-    //                     throw new Error(err);
-    //                   }
-    //                   Promise.resolve(sendMessage(`${title.innerHTML.trim()}\n${status}`)).catch(e => console.log(e));
-    //                 })
-    //               }
-    //             }else{
-    //               const unkou = {
-    //                 url:url,
-    //                 status:status
-    //               }
-    //               dbUnkous.create(unkou,(err,data) => {
-    //                 Promise.resolve(sendMessage(`${title.innerHTML.trim()}\n${status}`)).catch(e => console.log(e));
-    //               })
-    //             }
-    //           })
-    //         }
-    //       } catch (e) {
-    //         console.error(e)
-    //       }
-    //     })
-    //   })
-    // })
+    cron.schedule('0 */5 * * * *', () => {
+      //中央総武線、京成
+      const urlarray = [
+        'http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_chuosobu',
+        'http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_keisei'
+      ]
+      urlarray.forEach((url) => {
+        request(url, (e, response, body) => {
+          if (e) {
+            console.error(e)
+          }
+          try {
+            const dom = new JSDOM(body)
+            const title = dom.window.document.getElementsByTagName('title')[0]
+            const statuslist = dom.window.document.getElementsByClassName('corner_block_row_detail_d')
+            for (var i = 0; i < statuslist.length; i++) {
+              const status = statuslist[i].innerHTML.trim();
+              if (checkStatusUnko(url,status)){
+                Promise.resolve(sendMessage(`${title.innerHTML.trim()}\n${status}`)).catch(e => console.log(e));
+              }
+            }
+          } catch (e) {
+            console.error(e)
+          }
+        })
+      })
+    })
     //    cron.schedule('0 */5 * * * *', () => {
     cron.schedule('0 0 7 * * *', () => {
       db.findAll((err, data) => {
@@ -77,7 +54,7 @@ module.exports = {
         } else {
           for (i = 0; i < data.rowCount; i++) {
             if (checkDayAgo(data.rows[i].schedule_id, 5)) {
-              let returnMessage = `\n-----\n予定が近づいています。\n日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[i].schedule_content}\n登録者：${data.rows[i].created_username}\n-----\n`;
+              let returnMessage = `予定が近づいています...。\n-----\n\n日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[i].schedule_content}\n登録者：${data.rows[i].created_username}\n-----\n`;
               Promise.resolve(sendMessage(returnMessage)).catch(e => console.log(e));
             }
           }
@@ -93,7 +70,7 @@ module.exports = {
         } else {
           for (i = 0; i < data.rowCount; i++) {
             if (checkDayAgo(data.rows[i].schedule_id, 0)) {
-              let returnMessage = `この予定は過去になりました。\n日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[i].schedule_content}\n登録者：${data.rows[i].created_username}\n-----\n`;
+              let returnMessage = `この予定は過去になりました。\n-----\n\n日時：${data.rows[i].schedule_id}\nコンテンツ：${data.rows[i].schedule_content}\n登録者：${data.rows[i].created_username}\n-----\n`;
               Promise.resolve(sendMessage(returnMessage)).catch(e => console.log(e));
             }
           }
@@ -113,12 +90,44 @@ module.exports = {
         text: mes
       })
     }
-    //月末日を取得する
+    function checkStatusUnko(url, status) {
+      dbUnkous.find(url, (err, data) => {
+        if (err) {
+          console.log(err);
+          throw new Error(err);
+        }
+        if (data) {
+          // if (status != '現在、平常通り運転しています。' && status != '情報提供時間は4：00～翌2：00となっています。') {
+          if (status != data.status) {
+            dbUnkous.update(url, status, (err, data) => {
+              if (err) {
+                console.log(err);
+                throw new Error(err);
+              }
+              return true
+            })
+          }
+        } else {
+          const unkou = {
+            url: url,
+            status: status
+          }
+          dbUnkous.create(unkou, (err, data) => {
+            if (err) {
+              console.log(err)
+              throw new Error(err)
+            }
+            return true
+          })
+        }
+        return false
+      })
+
+    }
     function getLastDayOfMonth(year, month) {
       let date = new Date(year, month + 1, 0);
       return date.getDate();
     }
-    //指定した日付文字列から指定した日数分引いた日が、現在の日付と合致しているかチェックする
     function checkDayAgo(str, days) {
       let dayago = new Date();
       dayago.setDate(dayago.getDate() + days);
@@ -205,9 +214,6 @@ module.exports = {
                 throw new Error(err);
               });
           };
-        }
-        else {
-          Promise.resolve(returnMessage(event, "コマンドが誤っています。\n以下のリファレンスに従ってコマンドを送信してください。\n1行目：照会/登録/更新/削除\n2行目：日時をyyyyMMddHHmm形式で記入\n3行目：スケジュールの内容を記載")).catch(e => console.log(e));
         }
       }
     }
