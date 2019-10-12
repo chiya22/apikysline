@@ -38,6 +38,7 @@ module.exports = {
               concatStatus += statuslist[i].innerHTML.trim() + "\n"
             }
             if (checkStatusUnko(url,concatStatus)){
+              console.log(`sendMessage:${concatStatus}`)
               Promise.resolve(sendMessage(`${title.innerHTML.trim()}\n${concatStatus}`)).catch(e => console.log(e));
             }
 
@@ -92,6 +93,7 @@ module.exports = {
         text: mes
       })
     }
+    //■運行状況用
     function checkStatusUnko(url, status) {
       dbUnkous.find(url, (err, data) => {
         if (err) {
@@ -99,7 +101,6 @@ module.exports = {
           throw new Error(err);
         }
         if (data) {
-          // if (status != '現在、平常通り運転しています。' && status != '情報提供時間は4：00～翌2：00となっています。') {
           console.log(`status:${status}`)
           console.log(`data.status:${data.status}`)
           if (status != data.status) {
@@ -116,6 +117,7 @@ module.exports = {
             url: url,
             status: status
           }
+          console.log(`create:${status}`)
           dbUnkous.create(unkou, (err, data) => {
             if (err) {
               console.log(err)
