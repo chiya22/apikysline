@@ -98,6 +98,8 @@ module.exports = {
         }
         if (data) {
           // if (status != '現在、平常通り運転しています。' && status != '情報提供時間は4：00～翌2：00となっています。') {
+          console.log(`status:${status}`)
+          console.log(`data.status:${data.status}`)
           if (status != data.status) {
             dbUnkous.update(url, status, (err, data) => {
               if (err) {
