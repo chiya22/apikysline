@@ -35,10 +35,10 @@ module.exports = {
             const statuslist = dom.window.document.getElementsByClassName('corner_block_row_detail_d')
             let concatStatus;
             for (var i = 0; i < statuslist.length; i++) {
-              if (concatStatus !== null) {
-                concatStatus += `${statuslist[i].innerHTML.trim()}\n`
+              if (concatStatus != null) {
+                concatStatus += `■${statuslist[i].innerHTML.trim()}\n`
               } else {
-                concatStatus = `${statuslist[i].innerHTML.trim()}\n`
+                concatStatus = `■${statuslist[i].innerHTML.trim()}\n`
               }
             }
             checkStatusUnko(url,title,concatStatus)
@@ -109,7 +109,6 @@ module.exports = {
                 console.log(err);
                 throw new Error(err);
               }
-              console.log("sendmessage")
               Promise.resolve(sendMessage(`${title}\n${status}`)).catch(e => console.log(e))
             })
           }
@@ -124,11 +123,9 @@ module.exports = {
               console.log(err)
               throw new Error(err)
             }
-            console.log("sendmessage")
             Promise.resolve(sendMessage(`${title}\n${status}`)).catch(e => console.log(e))
           })
         }
-        return false
       })
 
     }
