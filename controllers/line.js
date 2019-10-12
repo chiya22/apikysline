@@ -33,12 +33,14 @@ module.exports = {
             const dom = new JSDOM(body)
             const title = dom.window.document.getElementsByTagName('title')[0]
             const statuslist = dom.window.document.getElementsByClassName('corner_block_row_detail_d')
+            let concatStatus;
             for (var i = 0; i < statuslist.length; i++) {
-              const status = statuslist[i].innerHTML.trim();
-              if (checkStatusUnko(url,status)){
-                Promise.resolve(sendMessage(`${title.innerHTML.trim()}\n${status}`)).catch(e => console.log(e));
-              }
+              concatStatus += statuslist[i].innerHTML.trim() + "\n"
             }
+            if (checkStatusUnko(url,concatStatus)){
+              Promise.resolve(sendMessage(`${title.innerHTML.trim()}\n${concatStatus}`)).catch(e => console.log(e));
+            }
+
           } catch (e) {
             console.error(e)
           }
