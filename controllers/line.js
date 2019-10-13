@@ -9,15 +9,7 @@ const { JSDOM } = require('jsdom');
 module.exports = {
   startCron: () => {
     const client = new line.Client(config);
-    // cron.schedule('0 0 12 * * 1-5', () => {
-    //   Promise.resolve(sendMessage("お昼ですよ、メールしましょ")).catch(e => console.log(e));
-    // });
-    // cron.schedule('0 0 13 * * 1-5', () => {
-    //   Promise.resolve(sendMessage("午後が始まりますよ、メールしましょ")).catch(e => console.log(e));
-    // });
-    // cron.schedule('0 0 16 * * 1-5', () => {
-    //   Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e => console.log(e));
-    // });
+    //■運行状況用
     cron.schedule('0 */59 * * * *', () => {
       //中央総武線、京成
       const urlarray = [
@@ -41,13 +33,14 @@ module.exports = {
                 concatStatus = `■${statuslist[i].innerHTML.trim()}\n`
               }
             }
-            checkStatusUnko(url,title,concatStatus)
+            checkStatusUnko(url, title, concatStatus)
           } catch (e) {
             console.error(e)
           }
         })
       })
     })
+    //■スケジュール登録用
     //    cron.schedule('0 */5 * * * *', () => {
     cron.schedule('0 0 7 * * *', () => {
       db.findAll((err, data) => {
@@ -80,13 +73,32 @@ module.exports = {
         }
       })
     });
+    //■個人用
+    cron.schedule('0 0 12 * * 1-5', () => {
+      Promise.resolve(sendMessage("お昼ですよ、メールしましょ")).catch(e => console.log(e));
+    });
+    cron.schedule('0 0 13 * * 1-5', () => {
+      Promise.resolve(sendMessage("午後が始まりますよ、メールしましょ")).catch(e => console.log(e));
+    });
+    cron.schedule('0 0 16 * * 1-5', () => {
+      Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e => console.log(e));
+    });
     cron.schedule('0 0 9 28-31 * 1-5', () => {
       const date = new Date();
       const lastDate = getLastDayOfMonth(date.getFullYear(), date.getMonth())
       if (lastDate == date.getDate()) {
-        Promise.resolve(sendMessage("締資料作成しました？作成していないなら作成しましょ")).catch(e => console.log(e));
+        Promise.resolve(sendMessage("締資料作成しました？\n作成していないなら作成しましょ")).catch(e => console.log(e));
       }
     });
+    cron.schedule('0 0 9 21 * *', () => {
+      const date = new Date();
+      const lastDate = getLastDayOfMonth(date.getFullYear(), date.getMonth())
+      if (lastDate == date.getDate()) {
+        Promise.resolve(sendMessage("携帯代を経費精算作成しましたか？\n作成していないなら作成しましょ")).catch(e => console.log(e));
+      }
+    });
+
+
     async function sendMessage(mes) {
       return client.pushMessage("Ub09377720f78d780eec5acac8eb075d4", {
         type: "text",
@@ -144,6 +156,7 @@ module.exports = {
       }
     }
   },
+  
   returnMessage: (req, res) => {
 
     //　最初にstatusを正常に設定しておく
