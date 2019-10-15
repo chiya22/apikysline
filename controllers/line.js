@@ -10,36 +10,36 @@ module.exports = {
   startCron: () => {
     const client = new line.Client(config);
     //■運行状況用
-    cron.schedule('0 */59 * * * *', () => {
-      //中央総武線、京成
-      const urlarray = [
-        'http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_chuosobu',
-        'http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_keisei'
-      ]
-      urlarray.forEach((url) => {
-        request(url, (e, response, body) => {
-          if (e) {
-            console.error(e)
-          }
-          try {
-            const dom = new JSDOM(body)
-            const title = dom.window.document.getElementsByTagName('title')[0].innerHTML.trim()
-            const statuslist = dom.window.document.getElementsByClassName('corner_block_row_detail_d')
-            let concatStatus;
-            for (var i = 0; i < statuslist.length; i++) {
-              if (concatStatus != null) {
-                concatStatus += `■${statuslist[i].innerHTML.trim()}\n`
-              } else {
-                concatStatus = `■${statuslist[i].innerHTML.trim()}\n`
-              }
-            }
-            checkStatusUnko(url, title, concatStatus)
-          } catch (e) {
-            console.error(e)
-          }
-        })
-      })
-    })
+    // cron.schedule('0 */59 * * * *', () => {
+    //   //中央総武線、京成
+    //   const urlarray = [
+    //     'http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_chuosobu',
+    //     'http://www.jikokuhyo.co.jp/search/detail/line_is/kanto_keisei'
+    //   ]
+    //   urlarray.forEach((url) => {
+    //     request(url, (e, response, body) => {
+    //       if (e) {
+    //         console.error(e)
+    //       }
+    //       try {
+    //         const dom = new JSDOM(body)
+    //         const title = dom.window.document.getElementsByTagName('title')[0].innerHTML.trim()
+    //         const statuslist = dom.window.document.getElementsByClassName('corner_block_row_detail_d')
+    //         let concatStatus;
+    //         for (var i = 0; i < statuslist.length; i++) {
+    //           if (concatStatus != null) {
+    //             concatStatus += `■${statuslist[i].innerHTML.trim()}\n`
+    //           } else {
+    //             concatStatus = `■${statuslist[i].innerHTML.trim()}\n`
+    //           }
+    //         }
+    //         checkStatusUnko(url, title, concatStatus)
+    //       } catch (e) {
+    //         console.error(e)
+    //       }
+    //     })
+    //   })
+    // })
     //■スケジュール登録用
     //    cron.schedule('0 */5 * * * *', () => {
     cron.schedule('0 0 7 * * *', () => {
@@ -74,15 +74,15 @@ module.exports = {
       })
     });
     //■個人用
-    cron.schedule('0 0 12 * * 1-5', () => {
-      Promise.resolve(sendMessage("お昼ですよ、メールしましょ")).catch(e => console.log(e));
-    });
-    cron.schedule('0 0 13 * * 1-5', () => {
-      Promise.resolve(sendMessage("午後が始まりますよ、メールしましょ")).catch(e => console.log(e));
-    });
-    cron.schedule('0 0 16 * * 1-5', () => {
-      Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e => console.log(e));
-    });
+    // cron.schedule('0 0 12 * * 1-5', () => {
+    //   Promise.resolve(sendMessage("お昼ですよ、メールしましょ")).catch(e => console.log(e));
+    // });
+    // cron.schedule('0 0 13 * * 1-5', () => {
+    //   Promise.resolve(sendMessage("午後が始まりますよ、メールしましょ")).catch(e => console.log(e));
+    // });
+    // cron.schedule('0 0 16 * * 1-5', () => {
+    //   Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e => console.log(e));
+    // });
     cron.schedule('0 0 9 28-31 * 1-5', () => {
       const date = new Date();
       const lastDate = getLastDayOfMonth(date.getFullYear(), date.getMonth())
@@ -97,7 +97,6 @@ module.exports = {
         Promise.resolve(sendMessage("携帯代を経費精算作成しましたか？\n作成していないなら作成しましょ")).catch(e => console.log(e));
       }
     });
-
 
     async function sendMessage(mes) {
       return client.pushMessage("Ub09377720f78d780eec5acac8eb075d4", {
