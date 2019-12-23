@@ -18,7 +18,6 @@ module.exports = {
         }
         try {
           const dom = new JSDOM(body)
-          const title = dom.window.document.getElementsByTagName('title')[0].innerHTML.trim()
           const uranailist = dom.window.document.getElementsByClassName('col-r')
           const uranairesult = uranailist[0].innerHTML.trim()
           Promise.resolve(sendMessage(`${uranairesult}`)).catch(e => console.log(e))
