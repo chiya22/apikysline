@@ -9,6 +9,24 @@ const { JSDOM } = require('jsdom');
 module.exports = {
   startCron: () => {
     const client = new line.Client(config);
+    // ■占い
+    cron.schedule('0 0 7 * * *', () => {
+      url = 'http://www.houigaku.net/01_hon_getsu/08year.html'
+      request(url, (e, response, body) => {
+        if (e) {
+          console.error(e)
+        }
+        try {
+          const dom = new JSDOM(body)
+          const title = dom.window.document.getElementsByTagName('title')[0].innerHTML.trim()
+          const uranailist = dom.window.document.getElementsByClassName('col-r')
+          const uranairesult = uranailist[0].innerHTML.trim()
+          Promise.resolve(sendMessage(`${uranairesult}`)).catch(e => console.log(e))
+        } catch (e) {
+          console.error(e)
+        }
+      })
+    })
     //■運行状況用
     // cron.schedule('0 */59 * * * *', () => {
     //   //中央総武線、京成
@@ -155,7 +173,7 @@ module.exports = {
       }
     }
   },
-  
+
   returnMessage: (req, res) => {
 
     //　最初にstatusを正常に設定しておく
