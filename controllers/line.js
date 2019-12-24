@@ -5,6 +5,7 @@ const cron = require("node-cron");
 const dbUnkous = require("../models/unkous");
 const request = require('request')
 const { JSDOM } = require('jsdom');
+const iconv = require("iconv-lite");
 
 module.exports = {
   startCron: () => {
@@ -27,6 +28,7 @@ module.exports = {
           //<div class="bday-input">以降をカット
           uranairesult = uranairesult.slice(0,uranairesult.indexOf('<div class="bday-input">'))
           console.log(uranairesult)
+          uranairesult = iconv.decode(uranairesult,"Shift_JIS")
           Promise.resolve(sendMessage(`${uranairesult}`)).catch(e => console.log(e))
         } catch (e) {
           console.error(e)
