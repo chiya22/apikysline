@@ -22,7 +22,10 @@ module.exports = {
           const uranailist = dom.window.document.getElementsByClassName('col-r')
           let uranairesult = uranailist[0].innerHTML.trim()
           //</h3>までカット
-          uranairesult = slice(uranairesult.indexOf("</h3>")+5)
+          uranairesult = uranairesult.slice(uranairesult.indexOf("</h3>")+5)
+          console.log(uranairesult)
+          //<div class="bday-input">以降をカット
+          uranairesult = uranairesult.slice(0,uranairesult.indexOf('<div class="bday-input">'))
           console.log(uranairesult)
           Promise.resolve(sendMessage(`${uranairesult}`)).catch(e => console.log(e))
         } catch (e) {
