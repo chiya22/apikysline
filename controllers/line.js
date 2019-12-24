@@ -10,8 +10,9 @@ module.exports = {
   startCron: () => {
     const client = new line.Client(config);
     // ■占い
-    cron.schedule('0 0 7 * * *', () => {
-      url = 'http://www.houigaku.net/01_hon_getsu/08year.html'
+    cron.schedule('0 */5 * * * *', () => {
+      // cron.schedule('0 0 7 * * *', () => {
+        url = 'http://www.houigaku.net/01_hon_getsu/08year.html'
       request(url, (e, response, body) => {
         if (e) {
           console.error(e)
