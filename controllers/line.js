@@ -10,7 +10,7 @@ module.exports = {
   startCron: () => {
     const client = new line.Client(config);
     // ■占い
-    cron.schedule('0 */5 * * * *', () => {
+    cron.schedule('0 */55 * * * *', () => {
       // cron.schedule('0 0 7 * * *', () => {
         url = 'http://www.houigaku.net/01_hon_getsu/08year.html'
       request(url, (e, response, body) => {
@@ -20,7 +20,10 @@ module.exports = {
         try {
           const dom = new JSDOM(body)
           const uranailist = dom.window.document.getElementsByClassName('col-r')
-          const uranairesult = uranailist[0].innerHTML.trim()
+          let uranairesult = uranailist[0].innerHTML.trim()
+          //</h3>までカット
+          uranairesult = ura
+          console.log(uranairesult)
           Promise.resolve(sendMessage(`${uranairesult}`)).catch(e => console.log(e))
         } catch (e) {
           console.error(e)
