@@ -27,7 +27,8 @@ module.exports = {
           //<div class="bday-input">以降をカット
           uranairesult = uranairesult.slice(0, uranairesult.indexOf('<div class="bday-input">'))
           console.log(uranairesult)
-          uranairesult = iconv.decode(Buffer.from(uranairesult), "utf-8")
+          var tmp = new Buffer(uranailist, 'binary')
+          uranairesult = iconv.decode(tmp, "")
           console.log(uranairesult)
           Promise.resolve(sendMessage(`${uranairesult}`)).catch(e => console.log(e))
         } catch (e) {
