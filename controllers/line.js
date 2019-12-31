@@ -12,30 +12,30 @@ module.exports = {
     cron.schedule('0 15 7 * * *', () => {
       const mes = "【仕事】\n・プロジェクトに真剣に取り組んでみる\n・リモートで作業することができるような仕事を受注する\n・違う業界へチャレンジする\n【技術】\n・Reactを学習して、サイトを作成してみる\n・Cocodaを続けてデザインを勉強してみる\n・ブロックチェーンの理論を勉強してみる\n・最低限のサイトを構築できるようになる（Node.js + Express + Passport + 認証 + テーブルアクセス）\n【サッカー】\n・横浜のサッカーがあるときには横浜のサッカーへ参加する\n・千葉のサッカーでは自分がやりたいことにチャレンジする\n【料理】\n・キーマカレー以外のカレーを作れるようになる\n・キーマカレーの味の深みを追求してみる\n・フライパン料理を一品作れるようになる\n【畑】\n・シェア畑を続けてみる、かつ、作業の理由を納得しながら作業を行う\n・多肉植物を育ててみる\n【お金】\n・ふるさと納税をする\n・不要なものを購入しない\n【健康】\n・週に1回はジムへ行く\n・毎日（飲み会がある日以外）少しでもいいから筋トレし、記録する\n【恋愛】\n・セフレは最低3人キープする\n・小嶋さんにチャレンジしてみる"
       Promise.resolve(sendMessage(mes)).catch(e => console.log(e));
-    });
-    // cron.schedule('0 0 7 * * *', () => {
-    //   url = 'http://www.houigaku.net/01_hon_getsu/08year.html'
-    //   request(url, (e, response, body) => {
-    //     if (e) {
-    //       console.error(e)
-    //     }
-    //     try {
-    //       const dom = new JSDOM(body)
-    //       const uranailist = dom.window.document.getElementsByClassName('col-r')
-    //       let uranairesult = uranailist[0].innerHTML.trim()
-    //       //</h3>までカット
-    //       uranairesult = uranairesult.slice(uranairesult.indexOf("</h3>") + 5)
-    //       //<div class="bday-input">以降をカット
-    //       uranairesult = uranairesult.slice(0, uranairesult.indexOf('<div class="bday-input">'))
-    //       uranairesult = iconv.decode(Buffer.from(uranairesult), "")
-    //       console.log(uranairesult)
-    //       Promise.resolve(sendMessage(`${uranairesult}`)).catch(e => console.log(e))
-    //     } catch (e) {
-    //       console.error(e)
-    //     }
-    //   })
-    // })
-    //■運行状況用
+    })
+    cron.schedule('0 0 7 * * *', () => {
+      url = 'http://www.houigaku.net/01_hon_getsu/08year.html'
+      request(url, (e, response, body) => {
+        if (e) {
+          console.error(e)
+        }
+        try {
+          const dom = new JSDOM(body)
+          const uranailist = dom.window.document.getElementsByClassName('col-r')
+          let uranairesult = uranailist[0].innerHTML.trim()
+          //</h3>までカット
+          uranairesult = uranairesult.slice(uranairesult.indexOf("</h3>") + 5)
+          //<div class="bday-input">以降をカット
+          uranairesult = uranairesult.slice(0, uranairesult.indexOf('<div class="bday-input">'))
+          uranairesult = iconv.decode(Buffer.from(uranairesult), "")
+          console.log(uranairesult)
+          Promise.resolve(sendMessage(`${uranairesult}`)).catch(e => console.log(e))
+        } catch (e) {
+          console.error(e)
+        }
+      })
+    })
+    // ■運行状況用
     // cron.schedule('0 */59 * * * *', () => {
     //   //中央総武線、京成
     //   const urlarray = [
@@ -66,8 +66,8 @@ module.exports = {
     //     })
     //   })
     // })
-    //■スケジュール登録用
-    //    cron.schedule('0 */5 * * * *', () => {
+    // ■スケジュール登録用
+      //  cron.schedule('0 */5 * * * *', () => {
     // cron.schedule('0 0 7 * * *', () => {
     //   db.findAll((err, data) => {
     //     if (err) {
@@ -99,7 +99,7 @@ module.exports = {
     //     }
     //   })
     // });
-    //■個人用
+    // ■個人用
     // cron.schedule('0 0 12 * * 1-5', () => {
     //   Promise.resolve(sendMessage("お昼ですよ、メールしましょ")).catch(e => console.log(e));
     // });
@@ -109,20 +109,20 @@ module.exports = {
     // cron.schedule('0 0 16 * * 1-5', () => {
     //   Promise.resolve(sendMessage("夕ご飯どうしますか？メールしましょ")).catch(e => console.log(e));
     // });
-    // cron.schedule('0 0 9 28-31 * 1-5', () => {
-    //   const date = new Date();
-    //   const lastDate = getLastDayOfMonth(date.getFullYear(), date.getMonth())
-    //   if (lastDate == date.getDate()) {
-    //     Promise.resolve(sendMessage("締資料作成しました？\n作成していないなら作成しましょ")).catch(e => console.log(e));
-    //   }
-    // });
-    // cron.schedule('0 0 9 21 * *', () => {
-    //   const date = new Date();
-    //   const lastDate = getLastDayOfMonth(date.getFullYear(), date.getMonth())
-    //   if (lastDate == date.getDate()) {
-    //     Promise.resolve(sendMessage("携帯代を経費精算作成しましたか？\n作成していないなら作成しましょ")).catch(e => console.log(e));
-    //   }
-    // });
+    cron.schedule('0 0 9 28-31 * 1-5', () => {
+      const date = new Date();
+      const lastDate = getLastDayOfMonth(date.getFullYear(), date.getMonth())
+      if (lastDate == date.getDate()) {
+        Promise.resolve(sendMessage("締資料作成しました？\n作成していないなら作成しましょ")).catch(e => console.log(e));
+      }
+    });
+    cron.schedule('0 0 9 21 * *', () => {
+      const date = new Date();
+      const lastDate = getLastDayOfMonth(date.getFullYear(), date.getMonth())
+      if (lastDate == date.getDate()) {
+        Promise.resolve(sendMessage("携帯代を経費精算作成しましたか？\n作成していないなら作成しましょ")).catch(e => console.log(e));
+      }
+    });
 
     async function sendMessage(mes) {
       return client.pushMessage("Ub09377720f78d780eec5acac8eb075d4", {
@@ -130,55 +130,55 @@ module.exports = {
         text: mes
       })
     }
-    //■運行状況用
-    // function checkStatusUnko(url, title, status) {
-    //   dbUnkous.find(url, (err, data) => {
-    //     if (err) {
-    //       console.log(err);
-    //       throw new Error(err);
-    //     }
-    //     if (data) {
-    //       if (status != data.status) {
-    //         dbUnkous.update(url, status, (err, data) => {
-    //           if (err) {
-    //             console.log(err);
-    //             throw new Error(err);
-    //           }
-    //           Promise.resolve(sendMessage(`${title}\n${status}`)).catch(e => console.log(e))
-    //         })
-    //       }
-    //     } else {
-    //       const unkou = {
-    //         url: url,
-    //         status: status
-    //       }
-    //       console.log(`create:${status}`)
-    //       dbUnkous.create(unkou, (err, data) => {
-    //         if (err) {
-    //           console.log(err)
-    //           throw new Error(err)
-    //         }
-    //         Promise.resolve(sendMessage(`${title}\n${status}`)).catch(e => console.log(e))
-    //       })
-    //     }
-    //   })
-    // }
-    // function getLastDayOfMonth(year, month) {
-    //   let date = new Date(year, month + 1, 0);
-    //   return date.getDate();
-    // }
-    // function checkDayAgo(str, days) {
-    //   let dayago = new Date();
-    //   dayago.setDate(dayago.getDate() + days);
-    //   const dayagoYYYY = dayago.getFullYear();
-    //   const dayagoMM = ("0" + dayago.getMonth() + 1).slice(-2);
-    //   const dayagoDD = ("0" + dayago.getDate()).slice(-2);
-    //   if ((str.substr(0, 4) == dayagoYYYY) && (str.substr(4, 2) == dayagoMM) && (str.substr(6, 2) == dayagoDD)) {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // }
+    // ■運行状況用
+    function checkStatusUnko(url, title, status) {
+      dbUnkous.find(url, (err, data) => {
+        if (err) {
+          console.log(err);
+          throw new Error(err);
+        }
+        if (data) {
+          if (status != data.status) {
+            dbUnkous.update(url, status, (err, data) => {
+              if (err) {
+                console.log(err);
+                throw new Error(err);
+              }
+              Promise.resolve(sendMessage(`${title}\n${status}`)).catch(e => console.log(e))
+            })
+          }
+        } else {
+          const unkou = {
+            url: url,
+            status: status
+          }
+          console.log(`create:${status}`)
+          dbUnkous.create(unkou, (err, data) => {
+            if (err) {
+              console.log(err)
+              throw new Error(err)
+            }
+            Promise.resolve(sendMessage(`${title}\n${status}`)).catch(e => console.log(e))
+          })
+        }
+      })
+    }
+    function getLastDayOfMonth(year, month) {
+      let date = new Date(year, month + 1, 0);
+      return date.getDate();
+    }
+    function checkDayAgo(str, days) {
+      let dayago = new Date();
+      dayago.setDate(dayago.getDate() + days);
+      const dayagoYYYY = dayago.getFullYear();
+      const dayagoMM = ("0" + dayago.getMonth() + 1).slice(-2);
+      const dayagoDD = ("0" + dayago.getDate()).slice(-2);
+      if ((str.substr(0, 4) == dayagoYYYY) && (str.substr(4, 2) == dayagoMM) && (str.substr(6, 2) == dayagoDD)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   },
 
   returnMessage: (req, res) => {
