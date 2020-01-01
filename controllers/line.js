@@ -126,13 +126,6 @@ module.exports = {
     //     Promise.resolve(sendMessage("携帯代を経費精算作成しましたか？\n作成していないなら作成しましょ")).catch(e => console.log(e));
     //   }
     // });
-
-    // async function sendMessage(mes) {
-    //   return client.pushMessage("Ub09377720f78d780eec5acac8eb075d4", {
-    //     type: "text",
-    //     text: mes
-    //   })
-    // }
     // ■運行状況用
     // function checkStatusUnko(url, title, status) {
     //   dbUnkous.find(url, (err, data) => {
@@ -182,6 +175,12 @@ module.exports = {
     //     return false;
     //   }
     // }
+    async function sendMessage(mes) {
+      return client.pushMessage("Ub09377720f78d780eec5acac8eb075d4", {
+        type: "text",
+        text: mes
+      })
+    }
   },
 
   returnMessage: (req, res) => {
