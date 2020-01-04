@@ -16,15 +16,15 @@ module.exports = {
       Promise.resolve(sendMessage(mes)).catch(e => console.log(e));
     })
     // ■占い
-    cron.schedule('0 */5 * * * *', () => {
-      // cron.schedule('0 0 7 * * *', () => {
+    // cron.schedule('0 */5 * * * *', () => {
+    cron.schedule('0 0 7 * * *', () => {
       url = 'http://www.houigaku.net/01_hon_getsu/08year.html'
       request({ url: url, encoding: null }, (e, response, body) => {
         if (e) {
           console.error(e)
         }
         try {
-          body = iconv.decode(body,'Shift-JIS')
+          body = iconv.decode(body, 'Shift-JIS')
           const dom = new JSDOM(body)
           const uranailist = dom.window.document.getElementsByClassName('col-r')
           let uranairesult = uranailist[0].innerHTML.trim()
