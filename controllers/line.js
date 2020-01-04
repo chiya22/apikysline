@@ -25,7 +25,6 @@ module.exports = {
         }
         try {
           body = iconv.decode(body,'Shift-JIS')
-          console.log(body)
           const dom = new JSDOM(body)
           const uranailist = dom.window.document.getElementsByClassName('col-r')
           let uranairesult = uranailist[0].innerHTML.trim()
