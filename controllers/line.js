@@ -33,7 +33,6 @@ module.exports = {
           uranairesult = uranairesult.slice(uranairesult.indexOf("</h3>") + 5)
           //<div class="bday-input">以降をカット
           uranairesult = uranairesult.slice(0, uranairesult.indexOf('<div class="bday-input">'))
-          uranairesult = iconv.decode(Buffer.from(uranairesult), "")
           Promise.resolve(sendMessage(`${uranairesult}`)).catch(e => console.log(e))
         } catch (e) {
           console.error(e)
